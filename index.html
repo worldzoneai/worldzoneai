@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="aYamQEhGUIUpW_2bKIm2iVsieF6OWVrl3u6eActDZU8" />
-    <title>WorldzoneAI - সর্বশেষ প্রযুক্তি ও সংবাদ আপডেট</title>
+    <title>WorldzoneAI - ক্যাটাগরি নিউজ</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,39 +11,40 @@
 
     <header class="main-header">
         <div class="header-top">
-            <div class="menu-icon" onclick="showInfo()">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
-            
-            <h1 class="logo">Worldzone<span>AI</span></h1>
-            
-            <div class="search-icon" onclick="alert('সার্চ অপশন আসছে...')">
-                <i class="fa fa-search"></i>
-            </div>
+            <div class="menu-icon" onclick="showInfo()"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+            <h1 class="logo" onclick="filterCategory('All')">Worldzone<span>AI</span></h1>
+            <div class="search-icon"><i class="fa fa-search"></i></div>
         </div>
+        
+        <nav class="category-nav">
+            <button class="cat-btn active" onclick="filterCategory('All')">সব</button>
+            <button class="cat-btn" onclick="filterCategory('পড়াশোনা')">পড়াশোনা</button>
+            <button class="cat-btn" onclick="filterCategory('টেকনোলজি')">টেকনোলজি</button>
+            <button class="cat-btn" onclick="filterCategory('আন্তর্জাতিক')">আন্তর্জাতিক</button>
+            <button class="cat-btn" onclick="filterCategory('স্বাস্থ্য')">স্বাস্থ্য</button>
+            <button class="cat-btn" onclick="filterCategory('এআই')">এআই</button>
+            <button class="cat-btn" onclick="filterCategory('ইনকাম')">ইনকাম</button>
+            <button class="cat-btn" onclick="filterCategory('চাকরি')">চাকরি</button>
+        </nav>
     </header>
 
     <div class="horizontal-line"></div>
-
-    <div class="top-ad-banner">
-        <p style="font-size: 10px; color: #999;">ADVERTISEMENT</p>
-        <div id="top-ad-placeholder">বিজ্ঞাপন এখানে থাকবে</div>
-    </div>
 
     <main class="feed-container">
         <div id="news-container"></div>
     </main>
 
+    <footer class="main-footer">
+        <div class="footer-links">
+            <span onclick="showInfo()">আমাদের সম্পর্কে</span> | <span onclick="showInfo()">যোগাযোগ</span>
+        </div>
+    </footer>
+
     <section id="info-section" class="info-container" style="display:none;">
         <div class="info-card">
             <span class="close-btn" onclick="closeInfo()">&times;</span>
-            <h2>আমাদের সম্পর্কে</h2>
-            <p>WorldzoneAI তে আপনাকে স্বাগতম। আমরা প্রযুক্তি ও বিশ্বের সর্বশেষ সংবাদ আপনার কাছে পৌঁছে দিই।</p>
-            <hr>
-            <h2>যোগাযোগ</h2>
-            <p>ইমেইল: info@worldzoneai.pages.dev</p>
+            <h2>তথ্য</h2>
+            <p>WorldzoneAI তে স্বাগতম।</p>
         </div>
     </section>
 
