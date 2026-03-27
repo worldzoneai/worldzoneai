@@ -59,3 +59,18 @@ articles.forEach((article, index) => {
 function toggleMenu() {
     alert("৩-ডট মেনু ক্লিক করা হয়েছে! এখানে আপনি কাস্টম সেটিংস বা লিংক যোগ করতে পারেন।");
 }
+
+// তথ্য দেখানোর ফাংশন
+function showInfo() {
+    document.getElementById('info-section').style.display = 'flex';
+}
+
+// তথ্য বন্ধ করার ফাংশন
+function closeInfo() {
+    document.getElementById('info-section').style.display = 'none';
+}
+
+// আপনার index.html-এর ড্রপডাউন মেনুর লিংকে নিচের মতো পরিবর্তন করুন:
+// <a href="javascript:void(0)" onclick="showInfo()">আমাদের সম্পর্কে</a>
+// <a href="javascript:void(0)" onclick="showInfo()">যোগাযোগ</a>
+
