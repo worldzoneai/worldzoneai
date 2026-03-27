@@ -5,7 +5,6 @@ const articles = [
     { title: "স্মার্টফোন ব্যবহারের স্বাস্থ্য ঝুঁকি", category: "স্বাস্থ্য", date: "২৬ মার্চ", desc: "অতিরিক্ত ফোন ব্যবহার আপনার চোখের ক্ষতি করছে।" }
 ];
 
-// ডার্ক মোড ফাংশন
 function toggleDarkMode() {
     const body = document.body;
     const icon = document.querySelector('#dark-mode-toggle i');
@@ -13,12 +12,12 @@ function toggleDarkMode() {
         body.removeAttribute('data-theme');
         icon.classList.replace('fa-sun', 'fa-moon');
     } else {
+        body.setAttribute('data-theme') === 'dark';
         body.setAttribute('data-theme', 'dark');
         icon.classList.replace('fa-moon', 'fa-sun');
     }
 }
 
-// সাইডবার ফাংশন
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('active');
 }
@@ -34,17 +33,30 @@ function displayArticles(filter = 'All') {
                     <span class="cat-badge">${article.category}</span>
                     <div class="headline">${article.title}</div>
                     <div class="meta">WorldzoneAI • ${article.date}</div>
-                    <p style="font-size:14px; margin-bottom:15px; opacity: 0.9;">${article.desc}</p>
-                    <div style="color:#0866ff; font-weight:bold; cursor:pointer;">বিস্তারিত পড়ুন...</div>
+                    <p style="font-size:14px; margin-bottom:15px; opacity: 0.9; line-height: 1.5;">${article.desc}</p>
+                    <div class="card-actions">
+                        <a href="#" class="read-more">বিস্তারিত পড়ুন...</a>
+                        <button class="share-btn" onclick="sharePage()">
+                            <i class="fa fa-share-nodes"></i> শেয়ার করুন
+                        </button>
+                    </div>
                 </article>
             `;
         }
     });
 }
 
+function sharePage() {
+    if (navigator.share) {
+        navigator.share({ title: 'WorldzoneAI', url: window.location.href });
+    } else {
+        alert('লিঙ্ক কপি করুন: ' + window.location.href);
+    }
+}
+
 function filterCategory(catName) {
     displayArticles(catName);
-    toggleSidebar(); // ক্লিক করলে মেনু বন্ধ হবে
+    toggleSidebar();
 }
 
 displayArticles();
