@@ -1,41 +1,37 @@
 const articles = [
     { 
-        title: "ব্রেকিং নিউজ: ২০২৬ সালের সেরা এআই টুলস কোনগুলো?", 
+        title: "WorldzoneAI-তে আপনাকে স্বাগতম! আজকের প্রযুক্তি সংবাদ দেখুন", 
         category: "সর্বশেষ", 
-        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80",
-        date: "২৭ মার্চ", 
-        desc: "প্রযুক্তি বিশ্বে প্রতিদিন নতুন নতুন এআই আসছে। তবে এ বছর উৎপাদনশীলতা বাড়াতে চ্যাটজিপিটি এবং জেমিনিই শীর্ষে রয়েছে।" 
+        date: "২৭ মার্চ ২০২৬", 
+        desc: "প্রযুক্তি বিশ্বের প্রতিদিনের আপডেট এবং নতুন সব উদ্ভাবন নিয়ে আমরা কাজ করছি। আমাদের সাথেই থাকুন।" 
     },
     { 
-        title: "ফ্রিল্যান্সিং করে মাসে লাখ টাকা ইনকামের সহজ উপায়", 
+        title: "ফ্রিল্যান্সিং করে আয় করার ৫টি সেরা উপায়", 
         category: "ইনকাম", 
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80",
-        date: "২৭ মার্চ", 
-        desc: "ঘরে বসে ইনকাম করতে চাইলে এখন গ্রাফিক ডিজাইন ও ওয়েব ডেভেলপমেন্টের চাহিদা সবচেয়ে বেশি। জেনে নিন কিভাবে শুরু করবেন।" 
+        date: "২৭ মার্চ ২০২৬", 
+        desc: "২০২৬ সালে ঘরে বসে আয়ের জন্য কোন কোন স্কিলগুলো সবচেয়ে বেশি জরুরি তা জেনে নিন।" 
     },
     { 
-        title: "ইন্টারনেটে আজ যা সবচেয়ে বেশি আলোচিত: ট্রেন্ডিং সংবাদ", 
-        category: "ট্রেন্ডিং", 
-        image: "https://images.unsplash.com/photo-1510733722163-bb299581a3c6?w=600&q=80",
-        date: "২৭ মার্চ", 
-        desc: "সোশ্যাল মিডিয়ায় ভাইরাল হওয়া আজকের সেরা সব খবর এবং ভিডিওর আপডেট একনজরে দেখে নিন।" 
+        title: "স্মার্টফোনের ব্যাটারি দীর্ঘদিন ভালো রাখার কৌশল", 
+        category: "টেকনোলজি", 
+        date: "২৬ মার্চ ২০২৬", 
+        desc: "আপনার ব্যবহৃত ফোনের ব্যাটারি দ্রুত নষ্ট হয়ে যাচ্ছে? এই নিয়মগুলো মেনে চললে ব্যাটারি থাকবে নতুনের মতো।" 
     }
 ];
 
-// সার্চবার টগল
+// সাইডবার টগল
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+}
+
+// সার্চ বক্স টগল
 function toggleSearch() {
     const box = document.getElementById('search-box');
     box.style.display = box.style.display === 'none' ? 'block' : 'none';
     if(box.style.display === 'block') document.getElementById('search-input').focus();
 }
 
-// সার্চ ফাংশন
-function searchArticles() {
-    const input = document.getElementById('search-input').value.toLowerCase();
-    displayArticles('All', input);
-}
-
-// ডার্ক মোড
+// ডার্ক মোড টগল
 function toggleDarkMode() {
     const body = document.body;
     const icon = document.querySelector('#dark-mode-toggle i');
@@ -48,10 +44,7 @@ function toggleDarkMode() {
     }
 }
 
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
-}
-
+// আর্টিকেল ফিল্টার এবং রেন্ডার
 function displayArticles(filter = 'All', searchTerm = '') {
     const container = document.getElementById('news-container');
     container.innerHTML = '';
@@ -64,12 +57,11 @@ function displayArticles(filter = 'All', searchTerm = '') {
             container.innerHTML += `
                 <article class="article-card">
                     <span class="cat-badge">${article.category}</span>
-                    <img src="${article.image}" class="article-img" alt="news">
                     <div class="headline">${article.title}</div>
                     <div class="meta">WorldzoneAI • ${article.date}</div>
-                    <p style="font-size:14px; margin-bottom:15px; opacity: 0.9; line-height: 1.5;">${article.desc}</p>
+                    <p style="font-size:14px; margin-bottom:15px; opacity: 0.9; line-height: 1.6;">${article.desc}</p>
                     <div class="card-actions">
-                        <a href="#" class="read-more">বিস্তারিত পড়ুন...</a>
+                        <span class="read-more">বিস্তারিত পড়ুন...</span>
                         <button class="share-btn" onclick="sharePage()">
                             <i class="fa fa-share-nodes"></i> শেয়ার
                         </button>
@@ -80,6 +72,13 @@ function displayArticles(filter = 'All', searchTerm = '') {
     });
 }
 
+// সার্চ ফাংশন
+function searchArticles() {
+    const input = document.getElementById('search-input').value.toLowerCase();
+    displayArticles('All', input);
+}
+
+// শেয়ার ফাংশন
 function sharePage() {
     if (navigator.share) {
         navigator.share({ title: 'WorldzoneAI', url: window.location.href });
@@ -88,10 +87,11 @@ function sharePage() {
     }
 }
 
+// ক্যাটাগরি ফিল্টার
 function filterCategory(catName) {
     displayArticles(catName);
     toggleSidebar();
 }
 
-// শুরুতে সব লোড করা
+// শুরুতে খবর লোড করা
 displayArticles();
