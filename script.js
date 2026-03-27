@@ -1,43 +1,53 @@
- const articles = [
-    { title: "WorldzoneAI-তে আপনাকে স্বাগতম! আজকের প্রযুক্তি সংবাদ দেখুন", date: "২৭ মার্চ ২০২৬", time: "০৩:০০ PM" },
-    { title: "নতুন স্মার্টফোনের বাজারে অস্থিরতা: কি ঘটছে?", date: "২৭ মার্চ ২০২৬", time: "০২:৩০ PM" },
-    { title: "ফ্রিল্যান্সিং টিপস: কিভাবে প্রথম কাজ পাবেন?", date: "২৭ মার্চ ২০২৬", time: "০২:০০ PM" },
-    { title: "বিশ্বের সেরা ৫টি AI টুলস যা আপনার কাজ সহজ করবে", date: "২৭ মার্চ ২০২৬", time: "০১:৩০ PM" },
-    { title: "ঢাকার বাতাসের মানের বড় পরিবর্তন", date: "২৭ মার্চ ২০২৬", time: "০১:০০ PM" },
-    { title: "ক্রিকেট বিশ্বকাপের আজকের আপডেট", date: "২৭ মার্চ ২০২৬", time: "১২:০০ PM" }
+const articles = [
+    { title: "কিভাবে ফ্রিল্যান্সিং শুরু করবেন?", category: "ইনকাম", date: "২৭ মার্চ", desc: "ঘরে বসে ইনকাম করার সেরা উপায়গুলো জানুন।" },
+    { title: "এআই প্রযুক্তির নতুন বিপ্লব", category: "এআই", date: "২৭ মার্চ", desc: "চ্যাটজিপিটির নতুন ভার্সন এখন আরও শক্তিশালী।" },
+    { title: "বিসিএস প্রস্তুতির সহজ গাইড", category: "পড়াশোনা", date: "২৬ মার্চ", desc: "পড়াশোনায় মন বসানোর কার্যকরী কৌশল।" },
+    { title: "স্মার্টফোন ব্যবহারের স্বাস্থ্য ঝুঁকি", category: "স্বাস্থ্য", date: "২৬ মার্চ", desc: "অতিরিক্ত ফোন ব্যবহার আপনার চোখের ক্ষতি করছে।" }
 ];
 
-const container = document.getElementById('news-container');
+function displayArticles(filter = 'All') {
+    const container = document.getElementById('news-container');
+    container.innerHTML = ''; // আগেরগুলো পরিষ্কার করা
 
-articles.forEach((article, index) => {
-    // নিউজ কার্ড
-    const articleHtml = `
-        <article class="article-card">
-            <div class="headline">${article.title}</div>
-            <div class="meta">${article.date} • ${article.time}</div>
-            <p style="color:#444; font-size:14px; margin-bottom:15px;">বিস্তারিত তথ্য এবং খবর জানতে আমাদের সাথেই থাকুন। এটি WorldzoneAI এর একটি স্ট্যাটিক ডেমো পোস্ট।</p>
-            <div class="card-actions">
-                <button class="action-btn"><i class="fa fa-thumbs-up"></i> Like</button>
-                <button class="action-btn"><i class="fa fa-comment"></i> Comment</button>
-                <button class="action-btn" onclick="alert('Shared!')"><i class="fa fa-share"></i> Share</button>
-            </div>
-        </article>
-    `;
+    articles.forEach((article) => {
+        if (filter === 'All' || article.category === filter) {
+            const articleHtml = `
+                <article class="article-card">
+                    <span class="cat-badge">${article.category}</span>
+                    <div class="headline">${article.title}</div>
+                    <div class="meta">WorldzoneAI • ${article.date}</div>
+                    <p style="color:#444; font-size:14px; margin-bottom:15px;">${article.desc}</p>
+                    <div class="card-actions">
+                        <span style="color:#0866ff; font-weight:bold; cursor:pointer;">বিস্তারিত পড়ুন...</span>
+                        <button class="share-btn" onclick="shareLink()"><i class="fa fa-share"></i> Share</button>
+                    </div>
+                </article>
+            `;
+            container.innerHTML += articleHtml;
+        }
+    });
+}
 
-    container.innerHTML += articleHtml;
+// ক্যাটাগরি অনুযায়ী ফিল্টার করার ফাংশন
+function filterCategory(catName) {
+    displayArticles(catName);
+    
+    // বাটনগুলোর অ্যাক্টিভ কালার পরিবর্তন
+    const buttons = document.querySelectorAll('.cat-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText === catName || (catName === 'All' && btn.innerText === 'সব')) {
+            btn.classList.add('active');
+        }
+    });
+}
 
-    // প্রতি ৪টি পোস্ট পর পর বিজ্ঞাপন (index ০ থেকে শুরু তাই +১)
-    if ((index + 1) % 4 === 0) {
-        container.innerHTML += `
-            <div class="infeed-ad">
-                <p style="font-size: 10px; color: #999; margin-bottom: 8px;">SPONSORED</p>
-                <div style="height: 150px; background: #f0f2f5; display: flex; align-items: center; justify-content: center; border: 1px dashed #ccc;">
-                    বিজ্ঞাপনের কোড এখানে বসান
-                </div>
-            </div>
-        `;
-    }
-});
+function shareLink() {
+    alert('লিঙ্ক কপি হয়েছে: ' + window.location.href);
+}
 
 function showInfo() { document.getElementById('info-section').style.display = 'flex'; }
 function closeInfo() { document.getElementById('info-section').style.display = 'none'; }
+
+// শুরুতে সব আর্টিকেল দেখানো
+displayArticles();
