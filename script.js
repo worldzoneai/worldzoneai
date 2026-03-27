@@ -1,97 +1,97 @@
-const articles = [
-    { 
-        title: "WorldzoneAI-তে আপনাকে স্বাগতম! আজকের প্রযুক্তি সংবাদ দেখুন", 
-        category: "সর্বশেষ", 
-        date: "২৭ মার্চ ২০২৬", 
-        desc: "প্রযুক্তি বিশ্বের প্রতিদিনের আপডেট এবং নতুন সব উদ্ভাবন নিয়ে আমরা কাজ করছি। আমাদের সাথেই থাকুন।" 
-    },
-    { 
-        title: "ফ্রিল্যান্সিং করে আয় করার ৫টি সেরা উপায়", 
-        category: "ইনকাম", 
-        date: "২৭ মার্চ ২০২৬", 
-        desc: "২০২৬ সালে ঘরে বসে আয়ের জন্য কোন কোন স্কিলগুলো সবচেয়ে বেশি জরুরি তা জেনে নিন।" 
-    },
-    { 
-        title: "স্মার্টফোনের ব্যাটারি দীর্ঘদিন ভালো রাখার কৌশল", 
-        category: "টেকনোলজি", 
-        date: "২৬ মার্চ ২০২৬", 
-        desc: "আপনার ব্যবহৃত ফোনের ব্যাটারি দ্রুত নষ্ট হয়ে যাচ্ছে? এই নিয়মগুলো মেনে চললে ব্যাটারি থাকবে নতুনের মতো।" 
-    }
-];
+// বিজ্ঞাপনের কোডগুলো কোটেশনের (" ") ভেতরে বসান
+const adCodeHeader = "";
+const adCodeMiddle1 = "";
+const adCodeMiddle2 = "";
+const adCodeFooter = "";
 
-// সাইডবার টগল
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
-}
+let articles = [];
 
-// সার্চ বক্স টগল
-function toggleSearch() {
-    const box = document.getElementById('search-box');
-    box.style.display = box.style.display === 'none' ? 'block' : 'none';
-    if(box.style.display === 'block') document.getElementById('search-input').focus();
-}
-
-// ডার্ক মোড টগল
-function toggleDarkMode() {
-    const body = document.body;
-    const icon = document.querySelector('#dark-mode-toggle i');
-    if (body.getAttribute('data-theme') === 'dark') {
-        body.removeAttribute('data-theme');
-        icon.className = 'fa fa-moon';
-    } else {
-        body.setAttribute('data-theme', 'dark');
-        icon.className = 'fa fa-sun';
+// JSON থেকে ডাটা লোড করা
+async function loadNews() {
+    try {
+        const response = await fetch('data.json');
+        articles = await response.json();
+        displayArticles();
+    } catch (error) {
+        console.error("ডাটা লোড করতে সমস্যা:", error);
     }
 }
 
-// আর্টিকেল ফিল্টার এবং রেন্ডার
 function displayArticles(filter = 'All', searchTerm = '') {
     const container = document.getElementById('news-container');
     container.innerHTML = '';
 
     articles.forEach((article) => {
         const matchesFilter = (filter === 'All' || article.category === filter);
-        const matchesSearch = article.title.toLowerCase().includes(searchTerm) || article.desc.toLowerCase().includes(searchTerm);
+        const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase());
 
         if (matchesFilter && matchesSearch) {
-            container.innerHTML += `
-                <article class="article-card">
-                    <span class="cat-badge">${article.category}</span>
-                    <div class="headline">${article.title}</div>
-                    <div class="meta">WorldzoneAI • ${article.date}</div>
-                    <p style="font-size:14px; margin-bottom:15px; opacity: 0.9; line-height: 1.6;">${article.desc}</p>
-                    <div class="card-actions">
-                        <span class="read-more">বিস্তারিত পড়ুন...</span>
-                        <button class="share-btn" onclick="sharePage()">
-                            <i class="fa fa-share-nodes"></i> শেয়ার
-                        </button>
-                    </div>
-                </article>
+            const formattedContent = article.content.replace(/\n/g, '<br>');
+            const contentParts = formattedContent.split('<br>');
+            const mid = Math.floor(contentParts.length / 2);
+
+            const card = document.createElement('article');
+            card.className = 'article-card';
+            card.id = `post-${article.id}`;
+            
+            card.innerHTML = `
+                <span class="cat-badge">${article.category}</span>
+                <div class="headline">${article.title}</div>
+                <div class="meta">WorldzoneAI • ${article.date}</div>
+
+                <div class="ad-slot">${adCodeHeader}</div>
+
+                <div class="content-area truncated">${article.content}</div>
+
+                <div class="content-area full-content">
+                    ${contentParts.slice(0, Math.floor(mid/2)).join('<br>')}
+                    <div class="ad-slot">${adCodeMiddle1}</div>
+                    ${contentParts.slice(Math.floor(mid/2), mid).join('<br>')}
+                    <div class="ad-slot">${adCodeMiddle2}</div>
+                    ${contentParts.slice(mid).join('<br>')}
+                    <div class="ad-slot">${adCodeFooter}</div>
+                </div>
+
+                <div class="card-actions">
+                    <span class="read-more-btn" onclick="toggleReadMore(${article.id})">বিস্তারিত পড়ুন...</span>
+                    <button class="share-btn" onclick="sharePage()"><i class="fa fa-share-nodes"></i> শেয়ার</button>
+                </div>
             `;
+            container.appendChild(card);
         }
     });
 }
 
-// সার্চ ফাংশন
-function searchArticles() {
-    const input = document.getElementById('search-input').value.toLowerCase();
-    displayArticles('All', input);
-}
-
-// শেয়ার ফাংশন
-function sharePage() {
-    if (navigator.share) {
-        navigator.share({ title: 'WorldzoneAI', url: window.location.href });
+function toggleReadMore(id) {
+    const card = document.getElementById(`post-${id}`);
+    const btn = card.querySelector('.read-more-btn');
+    if (card.classList.contains('expanded')) {
+        card.classList.remove('expanded');
+        btn.innerText = 'বিস্তারিত পড়ুন...';
+        window.scrollTo({top: card.offsetTop - 80, behavior: 'smooth'});
     } else {
-        alert('লিঙ্ক কপি করুন: ' + window.location.href);
+        card.classList.add('expanded');
+        btn.innerText = 'সংক্ষিপ্ত করুন';
     }
 }
 
-// ক্যাটাগরি ফিল্টার
-function filterCategory(catName) {
-    displayArticles(catName);
-    toggleSidebar();
+// কমন ফাংশনসমূহ
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+function toggleSearch() { 
+    const box = document.getElementById('search-box');
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    if(box.style.display === 'block') document.getElementById('search-input').focus();
+}
+function toggleDarkMode() {
+    const body = document.body;
+    body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? '' : 'dark');
+}
+function searchArticles() { displayArticles('All', document.getElementById('search-input').value); }
+function filterCategory(catName) { displayArticles(catName); toggleSidebar(); }
+function sharePage() {
+    if (navigator.share) navigator.share({ title: 'WorldzoneAI', url: window.location.href });
+    else alert('লিঙ্ক কপি করুন: ' + window.location.href);
 }
 
-// শুরুতে খবর লোড করা
-displayArticles();
+// অ্যাপ্লিকেশন শুরু
+loadNews();
