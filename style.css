@@ -1,53 +1,35 @@
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'SolaimanLipi', Arial, sans-serif; }
-body { background-color: #f0f2f5; color: #333; padding-bottom: 70px; }
+ * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+body { background-color: #f0f2f5; color: #1c1e21; }
 
-/* Header */
-header { background: #fff; padding: 15px; border-bottom: 2px solid #007bff; text-align: center; }
-.logo { font-size: 24px; color: #333; margin-bottom: 10px; }
-.logo span { color: #007bff; }
-.header-ad { background: #f9f9f9; border: 1px dashed #ccc; padding: 10px; min-height: 80px; display: flex; align-items: center; justify-content: center; max-width: 728px; margin: 0 auto; }
+.main-header { background: #fff; padding: 10px 15px; position: sticky; top: 0; z-index: 1000; }
+.header-top { display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto; }
 
-/* News Container */
-.container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+.menu-icon { cursor: pointer; }
+.bar { width: 22px; height: 3px; background-color: #333; margin: 4px 0; border-radius: 2px; }
 
-/* Article Card */
-.article-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #eee; }
-.headline { font-size: 1.6rem; line-height: 1.4; color: #1a1a1a; margin-bottom: 12px; cursor: pointer; }
-.headline:hover { color: #007bff; }
+.logo { font-size: 22px; font-weight: bold; }
+.logo span { color: #0866ff; }
+.search-icon { font-size: 18px; color: #65676b; cursor: pointer; }
 
-.meta-info { font-size: 0.85rem; color: #666; margin-bottom: 15px; display: flex; gap: 15px; flex-wrap: wrap; }
-.meta-info i { color: #007bff; margin-right: 5px; }
+/* মোটা হরিজন্টাল দাগ */
+.horizontal-line { height: 6px; background: #ddd; width: 100%; border-top: 1px solid #ccc; }
 
-.card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; pt: 15px; margin-top: 15px; padding-top: 15px; }
-.read-more-btn { background: #007bff; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; transition: 0.3s; }
-.read-more-btn:hover { background: #0056b3; }
-.share-icon { font-size: 1.3rem; color: #555; cursor: pointer; }
+.top-ad-banner { background: #fff; padding: 15px; text-align: center; border-bottom: 1px solid #ddd; margin-bottom: 10px; }
 
-/* In-feed Ad */
-.infeed-ad { background: #fffbe6; border: 1px solid #ffe58f; padding: 15px; margin-bottom: 20px; border-radius: 12px; text-align: center; font-weight: bold; color: #856404; }
+.feed-container { max-width: 600px; margin: 0 auto; }
 
-/* Sticky Footer */
-footer { position: fixed; bottom: 0; width: 100%; background: #222; color: #fff; padding: 12px 20px; z-index: 1000; }
-.footer-wrapper { display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
-.footer-left { display: flex; align-items: center; gap: 15px; }
+/* ফেসবুক স্টাইল কার্ড */
+.article-card { background: #fff; margin-bottom: 12px; padding: 15px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+.headline { font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; line-height: 1.4; }
+.meta { font-size: 12px; color: #65676b; margin-bottom: 15px; }
 
-/* Footer Dropdown */
-.dropdown { position: relative; }
-.dropbtn { background: #444; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }
-.dropdown-content { display: none; position: absolute; bottom: 40px; left: 0; background: #fff; min-width: 150px; box-shadow: 0 -4px 10px rgba(0,0,0,0.2); border-radius: 5px; overflow: hidden; }
-.dropdown-content a { color: #333; padding: 10px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #eee; }
-.dropdown-content a:hover { background: #f5f5f5; }
-.dropdown:hover .dropdown-content { display: block; }
+.card-actions { border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-around; }
+.action-btn { background: none; border: none; color: #65676b; font-weight: 600; cursor: pointer; font-size: 14px; }
 
-.three-dot-menu { cursor: pointer; font-size: 1.2rem; padding: 5px; }
+/* ইন-ফিড অ্যাড */
+.infeed-ad { background: #fff; margin-bottom: 12px; padding: 15px; text-align: center; border-radius: 8px; border: 1px solid #ddd; }
 
-/* About & Contact Popup Style */
-.info-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.info-card { background: #fff; padding: 30px; border-radius: 15px; max-width: 500px; width: 100%; position: relative; animation: slideUp 0.3s ease; }
-@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: #666; }
-.info-card h2 { color: #007bff; margin-bottom: 15px; font-size: 1.5rem; }
-.info-card p { line-height: 1.6; margin-bottom: 10px; color: #444; }
-.social-links { margin-top: 15px; display: flex; gap: 20px; font-size: 1.5rem; }
-.social-links a { color: #007bff; text-decoration: none; }
-hr { margin: 20px 0; border: 0; border-top: 1px solid #eee; }
+/* Popup */
+.info-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+.info-card { background: #fff; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; position: relative; }
+.close-btn { position: absolute; top: 10px; right: 15px; font-size: 25px; cursor: pointer; }
