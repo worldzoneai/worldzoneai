@@ -3,78 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <meta name="google-site-verification" content="aYamQEhGUIUpW_2bKIm2iVsieF6OWVrl3u6eActDZU8" />
-
     <title>WorldzoneAI - সর্বশেষ প্রযুক্তি ও সংবাদ আপডেট</title>
-    <meta name="title" content="WorldzoneAI - সর্বশেষ প্রযুক্তি ও সংবাদ আপডেট">
-    <meta name="description" content="WorldzoneAI তে পান দেশ-বিদেশের সর্বশেষ খবর, প্রযুক্তি রিভিউ এবং ফ্রিল্যান্সিং টিপস। প্রতিদিনের আপডেট পেতে আমাদের সাথেই থাকুন।">
-    <meta name="keywords" content="WorldzoneAI, প্রযুক্তি সংবাদ, ফ্রিল্যান্সিং টিপস, বাংলা নিউজ, টেক রিভিউ, Worldzone AI News">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="WorldzoneAI Team">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://worldzoneai.pages.dev/">
-    <meta property="og:title" content="WorldzoneAI - সর্বশেষ প্রযুক্তি ও সংবাদ আপডেট">
-    <meta property="og:description" content="দেশ-বিদেশের সর্বশেষ খবর ও প্রযুক্তির সব আপডেট এক জায়গায়।">
-    <meta property="og:image" content="https://worldzoneai.pages.dev/og-image.jpg">
-
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <header>
-        <div class="header-container">
+    <header class="main-header">
+        <div class="header-top">
+            <div class="menu-icon" onclick="showInfo()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            
             <h1 class="logo">Worldzone<span>AI</span></h1>
-            <div class="header-ad">
-                <p>--- হেডার বিজ্ঞাপন ---</p>
-                </div>
+            
+            <div class="search-icon" onclick="alert('সার্চ অপশন আসছে...')">
+                <i class="fa fa-search"></i>
+            </div>
         </div>
     </header>
 
-    <main class="container">
-        <div id="news-container">
-            </div>
-    </main>
-<section id="info-section" class="info-container" style="display:none;">
-    <div class="info-card">
-        <span class="close-btn" onclick="closeInfo()">&times;</span>
-        <div id="about-content">
-            <h2>আমাদের সম্পর্কে</h2>
-            <p>WorldzoneAI একটি আধুনিক নিউজ পোর্টাল যেখানে আমরা প্রতিদিনের সর্বশেষ প্রযুক্তি, ফ্রিল্যান্সিং টিপস এবং বিশ্বসংবাদ পরিবেশন করি। আমাদের লক্ষ্য হলো পাঠকদের কাছে সঠিক এবং দ্রুত তথ্য পৌঁছে দেওয়া।</p>
-        </div>
-        <hr>
-        <div id="contact-content">
-            <h2>যোগাযোগ করুন</h2>
-            <p><i class="fa fa-envelope"></i> ইমেইল: info@worldzoneai.pages.dev</p>
-            <p><i class="fa fa-location-dot"></i> ঠিকানা: ঢাকা, বাংলাদেশ</p>
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-whatsapp"></i></a>
-            </div>
-        </div>
-    </div>
-</section>
- <footer>
-        <div class="footer-wrapper">
-            <div class="footer-left">
-                <span>&copy; ২০২৬ WorldzoneAI</span>
-                <div class="dropdown">
-                    <button class="dropbtn">আরও তথ্য <i class="fa fa-chevron-up"></i></button>
-                    <div class="dropdown-content">
-                        <a href="#">আমাদের সম্পর্কে</a>
-                        <a href="#">গোপনীয়তা নীতি</a>
-                        <a href="#">যোগাযোগ</a>
-                    </div>
-                </div>
-            </div>
+    <div class="horizontal-line"></div>
 
-            <div class="three-dot-menu" onclick="toggleMenu()">
-                <i class="fa fa-ellipsis-v"></i>
-            </div>
+    <div class="top-ad-banner">
+        <p style="font-size: 10px; color: #999;">ADVERTISEMENT</p>
+        <div id="top-ad-placeholder">বিজ্ঞাপন এখানে থাকবে</div>
+    </div>
+
+    <main class="feed-container">
+        <div id="news-container"></div>
+    </main>
+
+    <section id="info-section" class="info-container" style="display:none;">
+        <div class="info-card">
+            <span class="close-btn" onclick="closeInfo()">&times;</span>
+            <h2>আমাদের সম্পর্কে</h2>
+            <p>WorldzoneAI তে আপনাকে স্বাগতম। আমরা প্রযুক্তি ও বিশ্বের সর্বশেষ সংবাদ আপনার কাছে পৌঁছে দিই।</p>
+            <hr>
+            <h2>যোগাযোগ</h2>
+            <p>ইমেইল: info@worldzoneai.pages.dev</p>
         </div>
-    </footer>
+    </section>
 
     <script src="script.js"></script>
 </body>
