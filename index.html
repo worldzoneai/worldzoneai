@@ -1,23 +1,20 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorldzoneAI - আধুনিক নিউজ ফিড</title>
+    <title>WorldzoneAI - নিউজ পোর্টাল</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-
     <header class="main-header">
         <div class="header-top">
-            <div class="menu-icon" onclick="toggleSidebar()">
-                <i class="fa fa-bars"></i>
-            </div>
+            <div class="menu-icon" onclick="toggleSidebar()"><i class="fa fa-bars"></i></div>
             <h1 class="logo" onclick="location.reload()">Worldzone<span>AI</span></h1>
             <div class="header-right">
-                <div id="dark-mode-toggle" onclick="toggleDarkMode()"><i class="fa fa-moon"></i></div>
-                <div class="search-icon" onclick="toggleSearch()"><i class="fa fa-search"></i></div>
+                <div onclick="toggleDarkMode()"><i class="fa fa-moon"></i></div>
+                <div onclick="toggleSearch()"><i class="fa fa-search"></i></div>
             </div>
         </div>
         <div id="search-box" class="search-box" style="display:none;">
@@ -27,31 +24,41 @@
 
     <div id="sidebar" class="sidebar">
         <span class="close-btn" onclick="toggleSidebar()">&times;</span>
-        <div class="sidebar-header">
-            <h2>Worldzone<span>AI</span></h2>
-            <p>আপনার প্রতিদিনের সঙ্গী</p>
-        </div>
+        <div class="sidebar-header"><h2>Worldzone<span>AI</span></h2></div>
         <div class="sidebar-content">
-            <h3>ক্যাটাগরি</h3>
             <ul>
                 <li onclick="filterCategory('All')"><i class="fa fa-house"></i> সব খবর</li>
                 <li onclick="filterCategory('সর্বশেষ')"><i class="fa fa-clock"></i> সর্বশেষ</li>
-                <li onclick="filterCategory('ট্রেন্ডিং')"><i class="fa fa-fire"></i> ট্রেন্ডিং</li>
                 <li onclick="filterCategory('চাকরি')"><i class="fa fa-briefcase"></i> চাকরি</li>
                 <li onclick="filterCategory('ইনকাম')"><i class="fa fa-money-bill-trend-up"></i> ইনকাম</li>
                 <li onclick="filterCategory('টেকনোলজি')"><i class="fa fa-laptop-code"></i> টেকনোলজি</li>
+                <li onclick="filterCategory('যোগাযোগ')"><i class="fa fa-envelope"></i> যোগাযোগ</li>
             </ul>
         </div>
     </div>
 
     <main class="feed-container">
-        <div id="news-container">
-            </div>
+        <div id="news-container"></div>
     </main>
 
-    <footer class="main-footer">
-        <p>&copy; ২০২৬ WorldzoneAI | সর্বস্বত্ব সংরক্ষিত</p>
-    </footer>
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <h3>শেয়ার করুন</h3>
+            <div id="social-links" class="share-icons"></div>
+            <button onclick="closeModal('share-modal')" class="close-btn-pop">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <h3>যোগাযোগ</h3>
+            <div style="padding:15px; text-align:left;">
+                <p><i class="fa fa-envelope"></i> ইমেইল: info@worldzoneai.com</p>
+                <p><i class="fa fa-phone"></i> ফোন: +৮৮০১৭XXXXXXXX</p>
+            </div>
+            <button onclick="closeModal('contact-modal')" class="close-btn-pop">বন্ধ করুন</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
