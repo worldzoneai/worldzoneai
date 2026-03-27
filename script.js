@@ -5,49 +5,46 @@ const articles = [
     { title: "স্মার্টফোন ব্যবহারের স্বাস্থ্য ঝুঁকি", category: "স্বাস্থ্য", date: "২৬ মার্চ", desc: "অতিরিক্ত ফোন ব্যবহার আপনার চোখের ক্ষতি করছে।" }
 ];
 
+// ডার্ক মোড ফাংশন
+function toggleDarkMode() {
+    const body = document.body;
+    const icon = document.querySelector('#dark-mode-toggle i');
+    if (body.getAttribute('data-theme') === 'dark') {
+        body.removeAttribute('data-theme');
+        icon.classList.replace('fa-sun', 'fa-moon');
+    } else {
+        body.setAttribute('data-theme', 'dark');
+        icon.classList.replace('fa-moon', 'fa-sun');
+    }
+}
+
+// সাইডবার ফাংশন
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+}
+
 function displayArticles(filter = 'All') {
     const container = document.getElementById('news-container');
-    container.innerHTML = ''; // আগেরগুলো পরিষ্কার করা
+    container.innerHTML = '';
 
     articles.forEach((article) => {
         if (filter === 'All' || article.category === filter) {
-            const articleHtml = `
+            container.innerHTML += `
                 <article class="article-card">
                     <span class="cat-badge">${article.category}</span>
                     <div class="headline">${article.title}</div>
                     <div class="meta">WorldzoneAI • ${article.date}</div>
-                    <p style="color:#444; font-size:14px; margin-bottom:15px;">${article.desc}</p>
-                    <div class="card-actions">
-                        <span style="color:#0866ff; font-weight:bold; cursor:pointer;">বিস্তারিত পড়ুন...</span>
-                        <button class="share-btn" onclick="shareLink()"><i class="fa fa-share"></i> Share</button>
-                    </div>
+                    <p style="font-size:14px; margin-bottom:15px; opacity: 0.9;">${article.desc}</p>
+                    <div style="color:#0866ff; font-weight:bold; cursor:pointer;">বিস্তারিত পড়ুন...</div>
                 </article>
             `;
-            container.innerHTML += articleHtml;
         }
     });
 }
 
-// ক্যাটাগরি অনুযায়ী ফিল্টার করার ফাংশন
 function filterCategory(catName) {
     displayArticles(catName);
-    
-    // বাটনগুলোর অ্যাক্টিভ কালার পরিবর্তন
-    const buttons = document.querySelectorAll('.cat-btn');
-    buttons.forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText === catName || (catName === 'All' && btn.innerText === 'সব')) {
-            btn.classList.add('active');
-        }
-    });
+    toggleSidebar(); // ক্লিক করলে মেনু বন্ধ হবে
 }
 
-function shareLink() {
-    alert('লিঙ্ক কপি হয়েছে: ' + window.location.href);
-}
-
-function showInfo() { document.getElementById('info-section').style.display = 'flex'; }
-function closeInfo() { document.getElementById('info-section').style.display = 'none'; }
-
-// শুরুতে সব আর্টিকেল দেখানো
 displayArticles();
