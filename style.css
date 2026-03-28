@@ -1,40 +1,41 @@
-:root { --bg: #f0f2f5; --header: #fff; --text: #1c1e21; --card: #fff; --border: #ddd; --primary: #0866ff; }
-[data-theme="dark"] { --bg: #18191a; --header: #242526; --text: #e4e6eb; --card: #242526; --border: #3e4042; }
+/* গ্লোবাল ভেরিয়েবল (কালার কন্ট্রোল) */
+:root {
+    --bg: #f4f7f6; --card: #ffffff; --text: #1a1a1a;
+    --primary: #2ecc71; --border: #ececec; --header: #fff;
+}
+[data-theme="dark"] {
+    --bg: #121212; --card: #1e1e1e; --text: #e0e0e0;
+    --header: #1e1e1e; --border: #333;
+}
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-body { background: var(--bg); color: var(--text); transition: 0.3s; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; margin: 0; }
 
+/* হেডার স্টাইল */
 .main-header { background: var(--header); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
-.header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; max-width: 850px; margin: 0 auto; }
+.header-inner { max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; }
+.logo { font-size: 22px; font-weight: 800; cursor: pointer; }
 .logo span { color: var(--primary); }
-.menu-icon, .header-right div { font-size: 20px; cursor: pointer; color: #65676b; padding: 5px; }
 
-.search-box { padding: 10px; background: var(--header); border-top: 1px solid var(--border); }
-.search-box input { width: 100%; max-width: 600px; margin: 0 auto; display: block; padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; }
+/* আর্টিকেল কার্ড স্টাইল */
+.content-feed { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+.post-card { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.post-title { font-size: 20px; margin-bottom: 10px; font-weight: 700; }
 
-.feed-container { max-width: 850px; margin: 0 auto; padding: 10px; }
-.article-card { background: var(--card); margin-bottom: 15px; padding: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-.headline { font-size: 1.3rem; font-weight: bold; margin-bottom: 10px; line-height: 1.4; }
-.meta { font-size: 12px; color: #65676b; margin-bottom: 10px; }
+/* See More ও ট্রানকেশন */
+.post-desc { line-height: 1.6; font-size: 15px; }
+.hidden-content { display: none; }
+.read-more-btn { color: var(--primary); cursor: pointer; font-weight: bold; display: inline-block; margin-top: 10px; }
 
-.content-area { font-size: 15px; line-height: 1.6; }
-.truncated { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.full-content { display: none; }
-.expanded .truncated { display: none; }
-.expanded .full-content { display: block; }
+/* ব্যানার বিজ্ঞাপনের স্টাইল (হোমপেজ) */
+.home-ad { background: #eee; text-align: center; padding: 20px; margin-bottom: 20px; border-radius: 8px; font-size: 12px; color: #888; border: 1px dashed #ccc; }
+[data-theme="dark"] .home-ad { background: #222; border-color: #444; }
 
-.ad-slot { background: rgba(0,0,0,0.03); border: 1px dashed #ccc; text-align: center; padding: 10px; margin: 15px 0; font-size: 12px; min-height: 50px; border-radius: 5px; }
-[data-theme="dark"] .ad-slot { background: rgba(255,255,255,0.05); }
-
-.sidebar { position: fixed; left: -285px; top: 0; width: 280px; height: 100%; background: var(--header); z-index: 2000; transition: 0.4s; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+/* সাইডবার মেনু */
+.sidebar { position: fixed; left: -280px; top: 0; width: 260px; height: 100%; background: var(--card); z-index: 2000; transition: 0.4s; padding: 20px; box-shadow: 2px 0 15px rgba(0,0,0,0.2); }
 .sidebar.active { left: 0; }
-.sidebar-header { padding: 30px 20px; background: var(--primary); color: #fff; }
-.sidebar-content li { padding: 15px; cursor: pointer; border-bottom: 1px solid var(--border); list-style: none; font-weight: 600; }
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; }
+.overlay.active { display: block; }
+.nav-links { list-style: none; padding: 0; margin-top: 30px; }
+.nav-links li { padding: 15px 0; border-bottom: 1px solid var(--border); cursor: pointer; font-weight: 600; }
 
-.modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
-.modal-content { background: var(--card); margin: 20% auto; padding: 25px; width: 85%; max-width: 350px; border-radius: 15px; text-align: center; }
-.share-icons { display: flex; justify-content: space-around; font-size: 35px; margin-top: 20px; }
-.fa-facebook { color: #1877F2; } .fa-whatsapp { color: #25D366; } .fa-twitter { color: #1DA1F2; } .fa-facebook-messenger { color: #0084FF; }
-
-.read-more-btn { color: var(--primary); font-weight: bold; cursor: pointer; display: inline-block; margin-top: 10px; }
-.close-btn-pop { margin-top: 20px; padding: 8px 20px; border-radius: 20px; border: none; background: var(--primary); color: #fff; cursor: pointer; }
+footer { text-align: center; padding: 40px 20px; font-size: 14px; opacity: 0.7; }
