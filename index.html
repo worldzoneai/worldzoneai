@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorldzoneAI - Global Finance & Make Money Online</title>
-    <meta name="description" content="Get the latest insights on Trading, Finance, and Making Money Online globally.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WorldzoneAI - Finance & Trading</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,12 +11,10 @@
 
     <header class="main-header">
         <div class="header-inner">
-            <div class="menu-btn" onclick="toggleMenu()">
-                <i class="fa fa-bars"></i>
-            </div>
-            <div class="logo">Worldzone<span>AI</span></div>
+            <div class="menu-btn" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
+            <div class="logo" onclick="location.reload()">Worldzone<span>AI</span></div>
             <div class="header-icons">
-                <i class="fa fa-moon" id="theme-toggle" onclick="toggleTheme()"></i>
+                <i class="fa fa-moon" onclick="toggleTheme()"></i>
                 <i class="fa fa-search" onclick="toggleSearch()"></i>
             </div>
         </div>
@@ -32,25 +29,30 @@
             <span class="close-sidebar" onclick="toggleMenu()">&times;</span>
         </div>
         <ul class="nav-links">
-            <li onclick="filterPosts('All')">Home</li>
-            <li onclick="filterPosts('Trading')">Trading</li>
-            <li onclick="filterPosts('Finance')">Finance</li>
-            <li onclick="filterPosts('Make Money')">Make Money</li>
-            <li onclick="showContact()">Contact</li>
+            <li onclick="filterPosts('All')"><i class="fa fa-home"></i> Home</li>
+            <li onclick="filterPosts('Trading')"><i class="fa fa-chart-line"></i> Trading</li>
+            <li onclick="filterPosts('Finance')"><i class="fa fa-wallet"></i> Finance</li>
+            <li onclick="filterPosts('Make Money')"><i class="fa fa-money-bill-wave"></i> Make Money</li>
+            <hr>
+            <li onclick="showPage('privacy')">Privacy Policy</li>
+            <li onclick="showPage('terms')">Terms of Service</li>
+            <li onclick="showPage('contact')">Contact Us</li>
         </ul>
     </div>
+
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
     <main class="content-feed">
-        <div id="articles-wrapper">
-            </div>
+        <div id="main-feed">
+            <div id="articles-wrapper"></div>
+        </div>
+        <div id="static-pages" style="display:none;" class="page-container">
+            <div id="page-content-area"></div>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2026 WorldzoneAI Global. All rights reserved.</p>
-        <div class="footer-links">
-            <span>Privacy Policy</span> | <span>Terms of Service</span>
-        </div>
     </footer>
 
     <script src="script.js"></script>
