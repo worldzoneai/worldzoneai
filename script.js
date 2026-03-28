@@ -7,10 +7,10 @@ const ADS = {
 let allPosts = [];
 
 // ২. ডাটা লোড করার ফাংশন (এটাই আসল সমস্যা সমাধান করবে)
-async function fetchArticles() {
+async function fetcharticles() {
     try {
         // এখানে আপনার গিটহাবের ফাইলের নাম 'articles.json' তাই এটাই দেওয়া হলো
-        const response = await fetch('.articles.json'); 
+        const response = await fetch('articles.json'); 
         if (!response.ok) throw new Error('File not found');
         allPosts = await response.json();
         renderFeed('All');
