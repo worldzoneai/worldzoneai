@@ -1,74 +1,113 @@
-// বিজ্ঞাপনের কোড এখানে বসাবেন
-const adHeader = "Header Ad Here"; 
-const adMid1 = "Middle Ad 1 Here";
-const adMid2 = "Middle Ad 2 Here";
-const adFooter = "Footer Ad Here";
+// বিজ্ঞাপনের কোডগুলো এখানে বসান (একবারই বসাবেন)
+const BANNER_AD = "<div class='home-ad'>[Homepage Banner Ad Here]</div>";
+const ARTICLE_AD = "<div class='home-ad'>[In-Article Middle Ad]</div>";
 
-let articles = [];
+let allPosts = [];
 
-async function loadNews() {
+// JSON ফাইল থেকে আর্টিকেল লোড করার ফাংশন
+async function fetchArticles() {
     try {
-        const res = await fetch('data.json');
-        articles = await res.json();
-        displayArticles();
-    } catch (e) { console.error("Data load failed"); }
+        const response = await fetch('articles.json');
+        allPosts = await response.json();
+        renderFeed('All');
+    } catch (err) {
+        console.error("Failed to load articles:", err);
+    }
 }
 
-function displayArticles(filter = 'All', search = '') {
-    const container = document.getElementById('news-container');
-    container.innerHTML = '';
-    articles.forEach(article => {
-        if ((filter === 'All' || article.category === filter) && article.title.toLowerCase().includes(search.toLowerCase())) {
-            const parts = article.content.split('\n\n');
-            const card = document.createElement('article');
-            card.className = 'article-card';
-            card.id = `post-${article.id}`;
+// হোমপেজে ফিড দেখানোর ফাংশন
+function renderFeed(category, search = "") {
+    const wrapper = document.getElementById('articles-wrapper');
+    wrapper.innerHTML = "";
+    let postCount = 0;
+
+    allPosts.forEach((post, index) => {
+        // ক্যাটাগরি এবং সার্চ ফিল্টার
+        if ((category === 'All' || post.category === category) && 
+            post.title.toLowerCase().includes(search.toLowerCase())) {
+            
+            postCount++;
+            
+            // ৬০ শব্দ পর্যন্ত শর্ট ডেসক্রিপশন তৈরি (ফেসবুকের মতো)
+            const words = post.content.split(' ');
+            const isLong = words.length > 60;
+            const shortText = words.slice(0, 60).join(' ') + "...";
+
+            const card = document.createElement('div');
+            card.className = "post-card";
+            card.id = `post-${post.id}`;
+            
             card.innerHTML = `
-                <span class="cat-badge" style="background:var(--primary);color:#fff;padding:2px 8px;border-radius:5px;font-size:11px;">${article.category}</span>
-                <div class="headline">${article.title}</div>
-                <div class="meta">WorldzoneAI • ${article.date}</div>
-                <div class="ad-slot">${adHeader}</div>
-                <div class="content-area truncated">${article.content}</div>
-                <div class="content-area full-content">
-                    ${parts.slice(0, 1).join('<br><br>')}
-                    <div class="ad-slot">${adMid1}</div>
-                    ${parts.slice(1, 2).join('<br><br>')}
-                    <div class="ad-slot">${adMid2}</div>
-                    ${parts.slice(2).join('<br><br>')}
-                    <div class="ad-slot">${adFooter}</div>
+                <small style="color:var(--primary)">${post.category}</small>
+                <div class="post-title">${post.title}</div>
+                
+                <div class="post-desc preview-text">${shortText}</div>
+                <div class="post-desc full-text hidden-content">
+                    ${ARTICLE_AD}
+                    ${post.content.split('\n\n').slice(0, 2).join('<br><br>')}
+                    ${ARTICLE_AD}
+                    ${post.content.split('\n\n').slice(2, 4).join('<br><br>')}
+                    ${ARTICLE_AD}
+                    ${post.content.split('\n\n').slice(4).join('<br><br>')}
+                    ${ARTICLE_AD}
                 </div>
-                <div style="display:flex; justify-content:space-between; margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
-                    <span class="read-more-btn" onclick="toggleReadMore(${article.id})">বিস্তারিত পড়ুন...</span>
-                    <span onclick="openShare('${article.title}', ${article.id})" style="cursor:pointer; font-weight:600;"><i class="fa fa-share-nodes"></i> শেয়ার</span>
-                </div>
+
+                <div class="read-more-btn" onclick="toggleReadMore(${post.id})">Read More</div>
             `;
-            container.appendChild(card);
+            wrapper.appendChild(card);
+
+            // প্রতি ৪টি পোস্টের পর হোমপেজে ব্যানার বিজ্ঞাপন দেখানো
+            if (postCount % 4 === 0) {
+                wrapper.innerHTML += BANNER_AD;
+            }
         }
     });
 }
 
+// বিস্তারিত পড়ার লজিক
 function toggleReadMore(id) {
     const card = document.getElementById(`post-${id}`);
-    const isExp = card.classList.toggle('expanded');
-    card.querySelector('.read-more-btn').innerText = isExp ? 'সংক্ষিপ্ত করুন' : 'বিস্তারিত পড়ুন...';
+    const preview = card.querySelector('.preview-text');
+    const full = card.querySelector('.full-text');
+    const btn = card.querySelector('.read-more-btn');
+
+    if (full.style.display === "block") {
+        full.style.display = "none";
+        preview.style.display = "block";
+        btn.innerText = "Read More";
+    } else {
+        full.style.display = "block";
+        preview.style.display = "none";
+        btn.innerText = "Show Less";
+    }
 }
 
-function openShare(title, id) {
-    const url = window.location.href + "#post-" + id;
-    document.getElementById('social-links').innerHTML = `
-        <i class="fab fa-facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${url}')"></i>
-        <i class="fab fa-facebook-messenger" onclick="window.open('fb-messenger://share?link=${url}')"></i>
-        <i class="fab fa-whatsapp" onclick="window.open('https://api.whatsapp.com/send?text=${title} ${url}')"></i>
-        <i class="fab fa-twitter" onclick="window.open('https://twitter.com/intent/tweet?url=${url}')"></i>
-    `;
-    document.getElementById('share-modal').style.display = 'block';
+// সাইডবার ও মেনু ফাংশন
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
 }
 
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-function toggleDarkMode() { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? '' : 'dark'); }
-function toggleSearch() { document.getElementById('search-box').style.display = (document.getElementById('search-box').style.display === 'none') ? 'block' : 'none'; }
-function filterCategory(cat) { if(cat==='যোগাযোগ') document.getElementById('contact-modal').style.display='block'; else displayArticles(cat); toggleSidebar(); }
-function searchArticles() { displayArticles('All', document.getElementById('search-input').value); }
+function toggleTheme() {
+    const body = document.body;
+    const current = body.getAttribute('data-theme');
+    body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
 
-loadNews();
+function toggleSearch() {
+    const box = document.getElementById('search-container');
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function searchPosts() {
+    const query = document.getElementById('search-input').value;
+    renderFeed('All', query);
+}
+
+function filterPosts(cat) {
+    renderFeed(cat);
+    toggleMenu();
+}
+
+// শুরুতে ডাটা লোড করা
+fetchArticles();
