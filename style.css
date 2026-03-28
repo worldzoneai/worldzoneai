@@ -44,3 +44,18 @@ html, body {
 
 /* স্ট্যাটিক পেজ ডিজাইন */
 .page-container { padding: 20px; line-height: 1.8; }
+
+.page-container {
+    max-width: 800px;
+    margin: 20px auto;
+    line-height: 1.8;
+}
+.page-container h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+.page-container p, .page-container li {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
