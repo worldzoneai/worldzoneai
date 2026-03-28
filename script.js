@@ -94,3 +94,52 @@ function toggleSearch() {
 function searchPosts() { renderFeed('All', document.getElementById('search-input').value); }
 
 fetchArticles();
+// স্ট্যাটিক পেজ দেখানোর ফাংশন (কোনো আলাদা ফাইলের প্রয়োজন নেই)
+function showPage(type) {
+    // নিউজ ফিড লুকানো এবং পেজ সেকশন দেখানো
+    document.getElementById('main-feed').style.display = 'none';
+    document.getElementById('static-pages').style.display = 'block';
+    
+    const contentArea = document.getElementById('page-content-area');
+    toggleMenu(); // মেনু অটো বন্ধ হবে
+
+    if(type === 'privacy') {
+        contentArea.innerHTML = `
+            <h2 style="color:var(--primary)">Privacy Policy</h2>
+            <p>At <b>WorldzoneAI</b>, we take your privacy seriously. This policy outlines how we handle information:</p>
+            <ul>
+                <li>We do not collect personal data without your consent.</li>
+                <li>Cookies are used only to improve your user experience and theme settings.</li>
+                <li>Third-party ads (like Google AdSense) may use cookies to serve relevant ads.</li>
+            </ul>
+            <p>For any privacy concerns, please contact our support team.</p>
+        `;
+    } 
+    else if(type === 'terms') {
+        contentArea.innerHTML = `
+            <h2 style="color:var(--primary)">Terms of Service</h2>
+            <p>Welcome to <b>WorldzoneAI</b>. By accessing this website, you agree to these terms:</p>
+            <ol>
+                <li>The content provided is for informational purposes related to Finance and Trading.</li>
+                <li>You may not reproduce or copy our articles without written permission.</li>
+                <li>We are not responsible for financial losses based on our general information.</li>
+            </ol>
+            <p>Please use our resources responsibly.</p>
+        `;
+    } 
+    else if(type === 'contact') {
+        contentArea.innerHTML = `
+            <h2 style="color:var(--primary)">Contact Us</h2>
+            <p>Have questions or business inquiries? Reach out to us directly:</p>
+            <div style="margin-top:20px;">
+                <p><b><i class="fa fa-envelope"></i> Email:</b> contact@worldzoneai.pages.dev</p>
+                <p><b><i class="fa fa-globe"></i> Website:</b> worldzoneai.pages.dev</p>
+                <p><b><i class="fa fa-clock"></i> Response Time:</b> Within 24-48 hours</p>
+            </div>
+            <p style="margin-top:20px;">Follow our social media channels for the latest updates on Trading and Finance.</p>
+        `;
+    }
+    
+    // পেজ পরিবর্তনের পর স্ক্রল করে একদম উপরে নিয়ে যাওয়া
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
