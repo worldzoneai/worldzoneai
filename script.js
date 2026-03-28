@@ -1,139 +1,96 @@
-// বিজ্ঞাপনের কোডগুলো এখানে বসান (একবারই বসাবেন)
-const BANNER_AD_CODE = "<div class='ad-slot'>[Homepage Banner Ad Here]</div>";
-const ARTICLE_AD_CODE = "<div class='ad-slot'>[In-Article/Header/Footer Ad]</div>";
+// বিজ্ঞাপনের কোড (আপনার অ্যাডসেন্স কোড এখানে বসাবেন)
+const HOME_BANNER = "<div class='ad-slot'>Homepage Banner Ad</div>";
+const POST_AD = "<div class='ad-slot'>Article Content Ad</div>";
 
 let allPosts = [];
 
-// JSON ফাইল থেকে আর্টিকেল লোড করার ফাংশন
+// ডাটা লোড করা
 async function fetchArticles() {
     try {
         const response = await fetch('articles.json');
         allPosts = await response.json();
-        renderFeed('All'); // ডিফল্টভাবে সব আর্টিকেল দেখাবে
-    } catch (err) {
-        console.error("Failed to load articles:", err);
-    }
+        renderFeed('All');
+    } catch (err) { console.error("Error loading articles"); }
 }
 
-// হোমপেজে ফিড দেখানোর ফাংশন (ক্যাটাগরি ও সার্চ লজিকসহ)
+// ফিড রেন্ডার করা (ক্যাটাগরি অনুযায়ী)
 function renderFeed(category, search = "") {
     const wrapper = document.getElementById('articles-wrapper');
-    wrapper.innerHTML = ""; // আগের কন্টেন্ট পরিষ্কার করা
-    let postCount = 0;
+    wrapper.innerHTML = "";
+    let count = 0;
 
-    allPosts.forEach((post) => {
-        // ক্যাটাগরি এবং সার্চ ফিল্টার
-        if ((category === 'All' || post.category === category) && 
-            post.title.toLowerCase().includes(search.toLowerCase())) {
-            
-            postCount++;
-            
-            // ৬০ শব্দ পর্যন্ত শর্ট ডেসক্রিপশন তৈরি (ফেসবুকের মতো "Read More" সিস্টেম)
+    allPosts.forEach(post => {
+        if ((category === 'All' || post.category === category) && post.title.toLowerCase().includes(search.toLowerCase())) {
+            count++;
             const words = post.content.split(' ');
-            const isLong = words.length > 60;
             const shortText = words.slice(0, 60).join(' ') + "...";
-
-            // কন্টেন্টকে প্যারাগ্রাফে ভাগ করা (বিজ্ঞাপন বসানোর জন্য)
-            const contentParts = post.content.split('\n\n');
-            const midIndex = Math.floor(contentParts.length / 2);
+            const parts = post.content.split('\n\n');
 
             const card = document.createElement('div');
             card.className = "post-card";
-            card.id = `post-${post.id}`;
-            
-            // আর্টিকেল কার্ডের HTML কাঠামো
             card.innerHTML = `
-                <div class="post-meta">${post.category}</div>
-                <div class="post-title">${post.title}</div>
-                
-                <div class="post-desc preview-text">${shortText}</div>
-                
-                <div class="post-desc full-text hidden-content">
-                    ${ARTICLE_AD_CODE}
-                    
-                    ${contentParts.slice(0, 2).join('<br><br>')}
-                    
-                    ${ARTICLE_AD_CODE}
-                    
-                    ${contentParts.slice(2, 4).join('<br><br>')}
-                    
-                    ${ARTICLE_AD_CODE}
-                    
-                    ${contentParts.slice(4).join('<br><br>')}
-                    
-                    ${ARTICLE_AD_CODE}
-                </div>
-
-                <div class="read-more-btn" onclick="toggleReadMore(${post.id})">Read More</div>
+                <small style="color:var(--primary)">${post.category}</small>
+                <h2 style="margin:5px 0;">${post.title}</h2>
+                <div class="post-preview">${shortText}</div>
+                <div class="post-full hidden-content">
+                    ${POST_AD} ${parts.slice(0, 2).join('<br><br>')}
+                    ${POST_AD} ${parts.slice(2, 4).join('<br><br>')}
+                    ${POST_AD} ${parts.slice(4).join('<br><br>')}
+                    ${POST_AD} </div>
+                <div class="read-more-btn" onclick="togglePost(this)">Read More</div>
             `;
             wrapper.appendChild(card);
 
-            // শর্ত ১: হোমপেজে প্রতি ৪টি পোস্টের পর অটোমেটিক ব্যানার বিজ্ঞাপন দেখানো
-            if (postCount % 4 === 0) {
-                wrapper.innerHTML += BANNER_AD_CODE;
-            }
+            if (count % 4 === 0) wrapper.innerHTML += HOME_BANNER; // হোমপেজে ৪টি পর অ্যাড
         }
     });
 }
 
-// বিস্তারিত পড়ুন এবং কমানোর লজিক (Inline "See More")
-function toggleReadMore(id) {
-    const card = document.getElementById(`post-${id}`);
-    const preview = card.querySelector('.preview-text');
-    const full = card.querySelector('.full-text');
-    const btn = card.querySelector('.read-more-btn');
-
+// Read More ফাংশন
+function togglePost(btn) {
+    const card = btn.parentElement;
+    const preview = card.querySelector('.post-preview');
+    const full = card.querySelector('.post-full');
     if (full.style.display === "block") {
-        full.style.display = "none";
-        preview.style.display = "block";
-        btn.innerText = "Read More";
-        // মোবাইল স্ক্রিনে কমানোর পর আর্টিকেলের শুরুতে ফিরে যাওয়া (ঐচ্ছিক)
-        window.scrollTo({top: card.offsetTop - 80, behavior: 'smooth'});
+        full.style.display = "none"; preview.style.display = "block"; btn.innerText = "Read More";
     } else {
-        full.style.display = "block";
-        preview.style.display = "none";
-        btn.innerText = "Show Less";
+        full.style.display = "block"; preview.style.display = "none"; btn.innerText = "Show Less";
     }
 }
 
-// সাইডবার ও মেনু ফাংশন (বাইরে ক্লিক করলে বন্ধ হবে Overlay দিয়ে)
+// মেনু ও স্ট্যাটিক পেজ কন্ট্রোল
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('overlay').classList.toggle('active');
 }
 
-// ডার্ক মোড ফাংশন
+function filterPosts(cat) {
+    document.getElementById('main-feed').style.display = 'block';
+    document.getElementById('static-pages').style.display = 'none';
+    renderFeed(cat); toggleMenu();
+}
+
+function showPage(type) {
+    document.getElementById('main-feed').style.display = 'none';
+    document.getElementById('static-pages').style.display = 'block';
+    const content = document.getElementById('page-content-area');
+    toggleMenu();
+
+    if(type === 'privacy') content.innerHTML = "<h2>Privacy Policy</h2><p>We value your privacy. Your data is never shared...</p>";
+    else if(type === 'terms') content.innerHTML = "<h2>Terms of Service</h2><p>Usage of WorldzoneAI is subject to international law...</p>";
+    else if(type === 'contact') content.innerHTML = "<h2>Contact Us</h2><p>Email: contact@worldzoneai.pages.dev</p>";
+}
+
 function toggleTheme() {
     const body = document.body;
-    const current = body.getAttribute('data-theme');
-    const isDark = (current === 'dark');
-    
-    // থিম পরিবর্তন
-    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    
-    // আইকন পরিবর্তন
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.className = isDark ? 'fa fa-moon' : 'fa fa-sun';
+    body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
 
-// সার্চ বার ফাংশন
 function toggleSearch() {
-    const box = document.getElementById('search-container');
-    box.style.display = box.style.display === 'none' ? 'block' : 'none';
-    if(box.style.display === 'block') document.getElementById('search-input').focus();
+    const s = document.getElementById('search-container');
+    s.style.display = s.style.display === 'none' ? 'block' : 'none';
 }
 
-// আর্টিকেল সার্চ করার ফাংশন
-function searchPosts() {
-    const query = document.getElementById('search-input').value;
-    renderFeed('All', query);
-}
+function searchPosts() { renderFeed('All', document.getElementById('search-input').value); }
 
-// ক্যাটাগরি ফিল্টার ফাংশন
-function filterPosts(cat) {
-    renderFeed(cat);
-    toggleMenu(); // ফিল্টার করার পর মেনু বন্ধ করা
-}
-
-// শুরুতে ডাটা লোড করা
 fetchArticles();
