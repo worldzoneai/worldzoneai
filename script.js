@@ -1,6 +1,8 @@
-// বিজ্ঞাপনের কোড (আপনার অ্যাডসেন্স কোড এখানে বসাবেন)
-const HOME_BANNER = "<div class='ad-slot'>Homepage Banner Ad</div>";
-const POST_AD = "<div class='ad-slot'>Article Content Ad</div>";
+// বিজ্ঞাপনের কোড (আপনার অ্যাডসেন্স কোডগুলো এখানে বসাবেন)
+const ADS = {
+    banner: "<div class='ad-slot'>[Homepage Banner Ad]</div>",
+    article: "<div class='ad-slot'>[In-Article/Header/Footer Ad]</div>"
+};
 
 let allPosts = [];
 
@@ -10,10 +12,10 @@ async function fetchArticles() {
         const response = await fetch('articles.json');
         allPosts = await response.json();
         renderFeed('All');
-    } catch (err) { console.error("Error loading articles"); }
+    } catch (err) { console.error("Error: Could not load JSON data."); }
 }
 
-// ফিড রেন্ডার করা (ক্যাটাগরি অনুযায়ী)
+// ফিড রেন্ডার ফাংশন
 function renderFeed(category, search = "") {
     const wrapper = document.getElementById('articles-wrapper');
     wrapper.innerHTML = "";
@@ -28,29 +30,32 @@ function renderFeed(category, search = "") {
 
             const card = document.createElement('div');
             card.className = "post-card";
+            card.id = `post-${post.id}`;
             card.innerHTML = `
-                <small style="color:var(--primary)">${post.category}</small>
-                <h2 style="margin:5px 0;">${post.title}</h2>
-                <div class="post-preview">${shortText}</div>
-                <div class="post-full hidden-content">
-                    ${POST_AD} ${parts.slice(0, 2).join('<br><br>')}
-                    ${POST_AD} ${parts.slice(2, 4).join('<br><br>')}
-                    ${POST_AD} ${parts.slice(4).join('<br><br>')}
-                    ${POST_AD} </div>
-                <div class="read-more-btn" onclick="togglePost(this)">Read More</div>
+                <small style="color:var(--primary); font-weight:bold;">${post.category.toUpperCase()}</small>
+                <div class="post-title">${post.title}</div>
+                <div class="preview-text">${shortText}</div>
+                <div class="full-text hidden-content">
+                    ${ADS.article} ${parts.slice(0, 2).join('<br><br>')}
+                    ${ADS.article} ${parts.slice(2, 4).join('<br><br>')}
+                    ${ADS.article} ${parts.slice(4).join('<br><br>')}
+                    ${ADS.article} </div>
+                <div class="read-more-btn" onclick="toggleReadMore(${post.id})">Read More</div>
             `;
             wrapper.appendChild(card);
 
-            if (count % 4 === 0) wrapper.innerHTML += HOME_BANNER; // হোমপেজে ৪টি পর অ্যাড
+            if (count % 4 === 0) wrapper.innerHTML += ADS.banner; // ৪ পোস্ট পর হোমপেজে অ্যাড
         }
     });
 }
 
-// Read More ফাংশন
-function togglePost(btn) {
-    const card = btn.parentElement;
-    const preview = card.querySelector('.post-preview');
-    const full = card.querySelector('.post-full');
+// Read More / Show Less ফাংশন
+function toggleReadMore(id) {
+    const card = document.getElementById(`post-${id}`);
+    const preview = card.querySelector('.preview-text');
+    const full = card.querySelector('.full-text');
+    const btn = card.querySelector('.read-more-btn');
+
     if (full.style.display === "block") {
         full.style.display = "none"; preview.style.display = "block"; btn.innerText = "Read More";
     } else {
@@ -58,8 +63,9 @@ function togglePost(btn) {
     }
 }
 
-// মেনু ও স্ট্যাটিক পেজ কন্ট্রোল
-function toggleMenu() {
+// মেনু এবং স্ট্যাটিক পেজ কন্ট্রোল
+function toggleMenu(e) {
+    if(e) e.stopPropagation();
     document.getElementById('sidebar').classList.toggle('active');
     document.getElementById('overlay').classList.toggle('active');
 }
@@ -68,6 +74,7 @@ function filterPosts(cat) {
     document.getElementById('main-feed').style.display = 'block';
     document.getElementById('static-pages').style.display = 'none';
     renderFeed(cat); toggleMenu();
+    window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function showPage(type) {
@@ -76,14 +83,22 @@ function showPage(type) {
     const content = document.getElementById('page-content-area');
     toggleMenu();
 
-    if(type === 'privacy') content.innerHTML = "<h2>Privacy Policy</h2><p>We value your privacy. Your data is never shared...</p>";
-    else if(type === 'terms') content.innerHTML = "<h2>Terms of Service</h2><p>Usage of WorldzoneAI is subject to international law...</p>";
-    else if(type === 'contact') content.innerHTML = "<h2>Contact Us</h2><p>Email: contact@worldzoneai.pages.dev</p>";
+    if(type === 'privacy') {
+        content.innerHTML = "<h2>Privacy Policy</h2><p>Your privacy is important to WorldzoneAI. We use cookies to improve your experience and show relevant ads through Google AdSense. We do not sell your personal data to third parties.</p>";
+    } else if(type === 'terms') {
+        content.innerHTML = "<h2>Terms of Service</h2><p>By using WorldzoneAI, you agree to our terms. Our content is for informational purposes only and should not be taken as financial advice.</p>";
+    } else if(type === 'contact') {
+        content.innerHTML = "<h2>Contact Us</h2><p>For any inquiries, feedback, or business proposals, please email us directly at:</p><h3 style='color:var(--primary); margin-top:20px;'><i class='fa fa-envelope'></i> contact@worldzoneai.pages.dev</h3>";
+    }
+    window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
+// থিম এবং সার্চ
 function toggleTheme() {
     const body = document.body;
-    body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-icon').className = isDark ? 'fa fa-moon' : 'fa fa-sun';
 }
 
 function toggleSearch() {
@@ -94,52 +109,3 @@ function toggleSearch() {
 function searchPosts() { renderFeed('All', document.getElementById('search-input').value); }
 
 fetchArticles();
-// স্ট্যাটিক পেজ দেখানোর ফাংশন (কোনো আলাদা ফাইলের প্রয়োজন নেই)
-function showPage(type) {
-    // নিউজ ফিড লুকানো এবং পেজ সেকশন দেখানো
-    document.getElementById('main-feed').style.display = 'none';
-    document.getElementById('static-pages').style.display = 'block';
-    
-    const contentArea = document.getElementById('page-content-area');
-    toggleMenu(); // মেনু অটো বন্ধ হবে
-
-    if(type === 'privacy') {
-        contentArea.innerHTML = `
-            <h2 style="color:var(--primary)">Privacy Policy</h2>
-            <p>At <b>WorldzoneAI</b>, we take your privacy seriously. This policy outlines how we handle information:</p>
-            <ul>
-                <li>We do not collect personal data without your consent.</li>
-                <li>Cookies are used only to improve your user experience and theme settings.</li>
-                <li>Third-party ads (like Google AdSense) may use cookies to serve relevant ads.</li>
-            </ul>
-            <p>For any privacy concerns, please contact our support team.</p>
-        `;
-    } 
-    else if(type === 'terms') {
-        contentArea.innerHTML = `
-            <h2 style="color:var(--primary)">Terms of Service</h2>
-            <p>Welcome to <b>WorldzoneAI</b>. By accessing this website, you agree to these terms:</p>
-            <ol>
-                <li>The content provided is for informational purposes related to Finance and Trading.</li>
-                <li>You may not reproduce or copy our articles without written permission.</li>
-                <li>We are not responsible for financial losses based on our general information.</li>
-            </ol>
-            <p>Please use our resources responsibly.</p>
-        `;
-    } 
-    else if(type === 'contact') {
-        contentArea.innerHTML = `
-            <h2 style="color:var(--primary)">Contact Us</h2>
-            <p>Have questions or business inquiries? Reach out to us directly:</p>
-            <div style="margin-top:20px;">
-                <p><b><i class="fa fa-envelope"></i> Email:</b> contact@worldzoneai.pages.dev</p>
-                <p><b><i class="fa fa-globe"></i> Website:</b> worldzoneai.pages.dev</p>
-                <p><b><i class="fa fa-clock"></i> Response Time:</b> Within 24-48 hours</p>
-            </div>
-            <p style="margin-top:20px;">Follow our social media channels for the latest updates on Trading and Finance.</p>
-        `;
-    }
-    
-    // পেজ পরিবর্তনের পর স্ক্রল করে একদম উপরে নিয়ে যাওয়া
-    window.scrollTo({top: 0, behavior: 'smooth'});
-}
