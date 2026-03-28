@@ -1,61 +1,46 @@
-/* গ্লোবাল ভেরিয়েবল (কালার কন্ট্রোল) */
+/* মেইন কালার ও থিম */
 :root {
     --bg: #f4f7f6; --card: #ffffff; --text: #1a1a1a;
     --primary: #2ecc71; --border: #ececec; --header: #fff;
-    --ad-bg: #eee;
 }
 [data-theme="dark"] {
     --bg: #121212; --card: #1e1e1e; --text: #e0e0e0;
     --header: #1e1e1e; --border: #333;
-    --ad-bg: #222;
 }
 
-body { font-family: 'Segoe UI', Inter, sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; margin: 0; line-height: 1.6; }
+/* এক সাইডে সাদা হওয়া বন্ধ করার জন্য গুরুত্বপূর্ণ */
+html, body { 
+    margin: 0; padding: 0; width: 100%; 
+    overflow-x: hidden; /* ডানে-বামে অতিরিক্ত জায়গা বন্ধ করবে */
+    background: var(--bg); color: var(--text);
+    font-family: 'Segoe UI', sans-serif;
+}
 
-/* হেডার স্টাইল (রেসপনসিভ) */
 .main-header { background: var(--header); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
-.header-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; }
-.logo { font-size: 24px; font-weight: 800; cursor: pointer; }
-.logo span { color: var(--primary); }
-.header-icons { display: flex; gap: 15px; font-size: 18px; color: #65676b; }
-.header-icons i { cursor: pointer; padding: 5px; }
+.header-inner { max-width: 800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; }
 
-/* সার্চ বার */
-.search-bar { padding: 10px; background: var(--header); border-top: 1px solid var(--border); }
-.search-bar input { width: 100%; max-width: 600px; margin: 0 auto; display: block; padding: 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; }
-
-/* আর্টিকেল ফিড স্টাইল */
-.content-feed { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
-.post-card { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-.post-meta { color: var(--primary); font-size: 12px; font-weight: 600; margin-bottom: 8px; }
-.post-title { font-size: 20px; margin: 0 0 10px 0; font-weight: 700; line-height: 1.4; }
-
-/* See More ও ট্রানকেশন */
-.post-desc { font-size: 15px; }
-.hidden-content { display: none; }
-.read-more-btn { color: var(--primary); cursor: pointer; font-weight: bold; display: inline-block; margin-top: 15px; }
-
-/* ব্যানার বিজ্ঞাপনের স্টাইল (হোমপেজ) */
-.ad-slot { background: var(--ad-bg); text-align: center; padding: 20px; margin-bottom: 20px; border-radius: 8px; font-size: 12px; color: #888; border: 1px dashed #ccc; min-height: 50px; }
-
-/* সাইডবার মেনু (মোবাইল ও ডেস্কটপ) */
-.sidebar { position: fixed; left: -280px; top: 0; width: 260px; height: 100%; background: var(--card); z-index: 2000; transition: 0.4s; padding: 20px; box-shadow: 2px 0 15px rgba(0,0,0,0.2); overflow-y: auto; }
-.sidebar.active { left: 0; }
-.sidebar-top { display: flex; justify-content: space-between; align-items: center; }
-.close-sidebar { font-size: 28px; cursor: pointer; color: #888; }
-.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; }
-.overlay.active { display: block; }
-.nav-links { list-style: none; padding: 0; margin-top: 30px; }
-.nav-links li { padding: 15px 0; border-bottom: 1px solid var(--border); cursor: pointer; font-weight: 600; font-size: 16px; }
-
-/* ফুটার */
-footer { text-align: center; padding: 40px 20px; font-size: 14px; border-top: 1px solid var(--border); background: var(--header); margin-top: auto; }
-.footer-links { margin-top: 10px; font-size: 12px; opacity: 0.7; }
-
-/* ডেস্কটপ রেসপনসিভনেস (Media Queries) */
-@media screen and (min-width: 1024px) {
-    /* বড় স্ক্রিনে কন্টেন্টগুলো সুন্দরভাবে দেখানোর জন্য */
-    .header-inner, .content-feed { max-width: 1000px; }
-    .post-card { padding: 30px; }
-    .post-title { font-size: 24px; }
+/* সাইডবার (হ্যামবার্গার মেনু) */
+.sidebar {
+    position: fixed; left: -285px; top: 0; width: 260px; height: 100%;
+    background: var(--card); z-index: 2000; transition: 0.3s ease-in-out;
+    padding: 20px; box-shadow: 5px 0 15px rgba(0,0,0,0.1);
 }
+.sidebar.active { left: 0; }
+.overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%;
+    height: 100%; background: rgba(0,0,0,0.5); z-index: 1500;
+}
+.overlay.active { display: block; }
+
+/* কন্টেন্ট কার্ড */
+.content-feed { max-width: 800px; margin: 15px auto; padding: 0 10px; }
+.post-card { background: var(--card); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); }
+.hidden-content { display: none; }
+.read-more-btn { color: var(--primary); font-weight: bold; cursor: pointer; margin-top: 10px; display: inline-block; }
+
+/* অ্যাড স্লট */
+.ad-slot { background: #eee; text-align: center; padding: 15px; margin: 10px 0; border-radius: 5px; font-size: 11px; color: #777; border: 1px dashed #ccc; }
+[data-theme="dark"] .ad-slot { background: #222; }
+
+/* স্ট্যাটিক পেজ ডিজাইন */
+.page-container { padding: 20px; line-height: 1.8; }
