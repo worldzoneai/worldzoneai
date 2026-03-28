@@ -3,56 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WorldzoneAI - Finance & Trading</title>
+    <title>WorldzoneAI - Global Finance & Trading</title>
+    <meta name="description" content="International platform for Trading, Finance, and Making Money Online.">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body onclick="closeSidebarOutside(event)">
 
     <header class="main-header">
         <div class="header-inner">
-            <div class="menu-btn" onclick="toggleMenu()"><i class="fa fa-bars"></i></div>
+            <div class="menu-btn" onclick="toggleMenu(event)"><i class="fa fa-bars"></i></div>
             <div class="logo" onclick="location.reload()">Worldzone<span>AI</span></div>
             <div class="header-icons">
-                <i class="fa fa-moon" onclick="toggleTheme()"></i>
+                <i class="fa fa-moon" id="theme-icon" onclick="toggleTheme()"></i>
                 <i class="fa fa-search" onclick="toggleSearch()"></i>
             </div>
         </div>
         <div id="search-container" class="search-bar" style="display:none;">
-            <input type="text" id="search-input" placeholder="Search articles..." onkeyup="searchPosts()">
+            <input type="text" id="search-input" placeholder="Search finance news..." onkeyup="searchPosts()">
         </div>
     </header>
 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-top">
             <div class="logo">Worldzone<span>AI</span></div>
-            <span class="close-sidebar" onclick="toggleMenu()">&times;</span>
+            <span class="close-sidebar" onclick="toggleMenu(event)">&times;</span>
         </div>
         <ul class="nav-links">
             <li onclick="filterPosts('All')"><i class="fa fa-home"></i> Home</li>
             <li onclick="filterPosts('Trading')"><i class="fa fa-chart-line"></i> Trading</li>
             <li onclick="filterPosts('Finance')"><i class="fa fa-wallet"></i> Finance</li>
             <li onclick="filterPosts('Make Money')"><i class="fa fa-money-bill-wave"></i> Make Money</li>
-            <hr>
+            <hr style="border: 0.5px solid var(--border); margin: 15px 0;">
             <li onclick="showPage('privacy')">Privacy Policy</li>
             <li onclick="showPage('terms')">Terms of Service</li>
             <li onclick="showPage('contact')">Contact Us</li>
         </ul>
     </div>
 
-    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="overlay" class="overlay" onclick="toggleMenu(event)"></div>
 
     <main class="content-feed">
         <div id="main-feed">
             <div id="articles-wrapper"></div>
         </div>
-        <div id="static-pages" style="display:none;" class="page-container">
-            <div id="page-content-area"></div>
+        <div id="static-pages" style="display:none;">
+            <div id="page-content-area" class="post-card page-card"></div>
         </div>
     </main>
 
     <footer>
         <p>&copy; 2026 WorldzoneAI Global. All rights reserved.</p>
+        <div class="footer-links">
+            <span onclick="showPage('privacy')">Privacy</span> | 
+            <span onclick="showPage('terms')">Terms</span> | 
+            <span onclick="showPage('contact')">Contact</span>
+        </div>
     </footer>
 
     <script src="script.js"></script>
