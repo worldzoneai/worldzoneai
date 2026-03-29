@@ -24,11 +24,11 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
     line-height: 1.6;
     color: var(--text);
-    background-color: #f0f2f5;
+    background-color: #ffffff; /* নিউজ পোর্টালের জন্য সাদা ব্যাকগ্রাউন্ড ভালো */
     transition: background 0.3s, color 0.3s;
 }
 
-/* ===== ২. হেডার ও নেভিগেশন (নতুন লেআউট) ===== */
+/* ===== ২. হেডার ও নেভিগেশন ===== */
 .header {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: var(--white);
@@ -43,12 +43,11 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between; /* এটি কন্টেন্টগুলোকে দুই পাশে সরিয়ে দিবে */
+    justify-content: space-between;
     align-items: center;
     padding: 0 1.5rem;
 }
 
-/* লোগো মাঝখানে রাখার জন্য */
 .logo h1 {
     font-size: 1.6rem;
     font-weight: 800;
@@ -59,16 +58,10 @@ body {
     background-clip: text;
 }
 
-/* ডানপাশের সার্চ অ্যাকশন */
 .header-right-actions {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.search-box {
-    display: flex;
-    align-items: center;
 }
 
 #searchInput {
@@ -96,11 +89,9 @@ body {
     color: var(--white);
     font-size: 1.2rem;
     cursor: pointer;
-    display: flex;
-    align-items: center;
 }
 
-/* হামবুর্গ মেনু (বামে) */
+/* হামবুর্গ মেনু ও নেভিগেশন */
 .hamburger {
     display: flex;
     flex-direction: column;
@@ -113,10 +104,8 @@ body {
     height: 3px;
     background: var(--white);
     border-radius: 2px;
-    transition: 0.3s;
 }
 
-/* মেনু ওপেন স্টাইল */
 .nav {
     position: absolute;
     top: 100%;
@@ -127,182 +116,125 @@ body {
     transform: translateX(-100%);
     transition: 0.4s;
     box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    z-index: 999;
 }
 
-.nav.active { transform: translateX(0); }
+.nav.active { transform: translateX(0); display: block; }
 
-.nav ul {
-    list-style: none;
-    padding: 2rem 1.5rem;
-}
-
+.nav ul { list-style: none; padding: 2rem 1.5rem; }
 .nav li { margin-bottom: 1.5rem; }
+.nav a { color: white; text-decoration: none; font-weight: 600; font-size: 1.1rem; }
 
-.nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-/* ডার্ক মোড আইটেম (মেনুর ভেতর) */
-.dark-mode-item {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 1.5rem;
-    cursor: pointer;
-}
-
-/* ===== ৩. ডার্ক মোড থিম (Dark Mode) ===== */
-body.dark-mode {
-    background-color: #121212 !important;
-    color: #e0e0e0 !important;
-}
-
-.dark-mode .article-card {
-    background-color: #1e1e1e !important;
-    border: 1px solid #333;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-}
-
-.dark-mode .article-body, .dark-mode .article-title {
-    color: #e0e0e0 !important;
-}
-
-.dark-mode .header, .dark-mode .nav {
-    background: #1f1f1f !important;
-}
-
-.dark-mode #searchInput {
-    background-color: #333;
-    color: white;
-    border-color: #444;
-}
-
-/* ===== ৪. আর্টিকেল কার্ড ও মেইন কন্টেন্ট ===== */
+/* ===== ৩. প্রথম আলো স্টাইল (বক্স ছাড়া আর্টিকেল) ===== */
 .main-container {
-    max-width: 1200px;
+    max-width: 900px; /* পড়ার সুবিধার জন্য কন্টেইনার একটু ছোট করা হলো */
     margin: 2rem auto;
     padding: 0 1.5rem;
     min-height: 70vh;
 }
 
 .article-card {
-    background: var(--white);
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    transition: 0.3s;
-}
-
-.article-header {
-    background: linear-gradient(135deg, var(--secondary), var(--accent));
-    color: white;
-    padding: 1.5rem;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #e0e0e0 !important; /* প্রতিটি খবরের নিচে চিকন লাইন */
+    margin-bottom: 25px !important;
+    padding-bottom: 20px !important;
+    border-radius: 0 !important;
 }
 
 .article-badge {
-    background: var(--success);
-    padding: 3px 10px;
-    border-radius: 5px;
-    font-size: 0.8rem;
+    color: var(--accent) !important;
+    background: transparent !important;
+    padding: 0;
+    font-weight: bold;
+    font-size: 0.9rem;
     text-transform: uppercase;
 }
 
-.article-content-wrapper {
-    padding: 1.5rem;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-}
-
-/* মোবাইল রেসপনসিভ */
-@media (max-width: 768px) {
-    .article-content-wrapper { grid-template-columns: 1fr; }
-    .logo h1 { font-size: 1.2rem; }
-    #searchInput.show { width: 100px; }
-}
-
-/* লোডার */
-.loader {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid var(--accent);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-    display: none;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } 
-}
-/* ১. আর্টিকেলের হেডলাইন থেকে ব্যাকগ্রাউন্ড কালার রিমুভ (স্ক্রিনশট ১২ অনুযায়ী) */
-.article-header {
-    background: none !important; /* গ্রেডিয়েন্ট কালার বাদ দেওয়া হলো */
-    color: var(--text) !important; /* টেক্সট কালার সাধারণ কালো/ধূসর করা হলো */
-    padding: 1.5rem 0 0.5rem 0;
-}
-
 .article-title {
-    color: var(--primary) !important; /* শুধু টাইটেলটি গাঢ় নীল হবে */
-    font-size: 1.8rem;
+    color: #222 !important;
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    margin: 10px 0 !important;
+    line-height: 1.4 !important;
+    cursor: pointer;
 }
 
-/* ২. About Us থেকে ফুটার পর্যন্ত সব মাঝখানে আনা (স্ক্রিনশট ১১ ও ১২ এর সমাধান) */
+.article-title:hover { color: var(--secondary) !important; }
+
+.article-body {
+    color: #444 !important;
+    font-size: 1.05rem !important;
+    line-height: 1.7 !important;
+    text-align: left !important;
+}
+
+.read-more-btn {
+    background: none !important;
+    color: #007bff !important;
+    padding: 0 !important;
+    font-weight: bold !important;
+    text-decoration: underline !important;
+    border: none !important;
+    cursor: pointer;
+}
+
+/* ===== ৪. ফুটার (সব কন্টেন্ট মিডিলে) ===== */
+.footer {
+    background: var(--primary);
+    color: white;
+    padding: 3rem 1.5rem 1.5rem;
+    margin-top: 4rem;
+}
+
 .footer-content-centered {
     max-width: 800px;
     margin: 0 auto;
-    text-align: center; /* সব টেক্সট মাঝখানে থাকবে */
+    text-align: center;
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
+.footer-section ul { padding: 0; list-style: none; }
+.footer-section ul li { margin: 10px 0; }
+.footer-section a { color: #ccc; text-decoration: none; }
+
 .social-links {
-    justify-content: center; /* সোশ্যাল আইকন মাঝখানে আনা */
-}
-
-.footer-section ul {
-    padding: 0;
-    list-style: none;
-}
-
-/* ৩. সার্চ বক্সের লোগো/আইকন স্টাইল */
-.search-box .icon-btn {
-    font-size: 1.2rem;
-    cursor: pointer;
-    background: none;
-    border: none;
-}
-
-/* মোবাইল রেসপনসিভনেস নিশ্চিত করা */
-@media (max-width: 768px) {
-    .article-title {
-        font-size: 1.4rem;
-        text-align: left;
-    }
-    .footer-section {
-        margin-bottom: 20px;
-    }
-}
-
-/* ১টি সার্চ লোগো এবং টেক্সট অ্যালাইনমেন্ট */
-.header-right-actions {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.5rem;
 }
 
-/* ফুটার কপিরাইট মিডিল করার জন্য */
-.footer-bottom p {
-    margin: 0 auto;
-    display: block;
+.footer-bottom {
     text-align: center;
+    width: 100%;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+    margin-top: 30px;
 }
 
-/* মেনু স্লাইড অপশন ঠিক করা */
-.nav.active {
-    display: block;
-    transform: translateX(0);
+.footer-bottom p { margin: 0 auto; }
+
+/* ===== ৫. ডার্ক মোড ও রেসপনসিভ ===== */
+body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important; }
+.dark-mode .article-title { color: #ffffff !important; }
+.dark-mode .article-card { border-bottom: 1px solid #333 !important; }
+
+@media (max-width: 768px) {
+    .article-title { font-size: 1.4rem !important; }
+    .logo h1 { font-size: 1.2rem; }
 }
 
+.loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
