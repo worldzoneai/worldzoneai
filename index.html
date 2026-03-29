@@ -37,18 +37,18 @@
         </div>
     </header>
     <div class="header-actions">
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchArticles()">
-        <button class="icon-btn" onclick="toggleSearch()" title="Search">
-            <i class="fas fa-search">🔍</i>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search articles..." class="search-input">
+        <button onclick="searchArticles()" class="search-btn">
+            <i class="fas fa-search"></i> Search
         </button>
     </div>
-    
-    <button id="darkModeBtn" class="icon-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode">
-        🌙
-    </button>
-</div>
 
+    <main class="main-container">
+        <div id="loader" class="loader"></div>
+
+        <div id="articlesContainer" class="articles-container"></div>
+    </main>
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
