@@ -286,4 +286,23 @@ body.dark-mode {
     }
 }
 
+/* ১টি সার্চ লোগো এবং টেক্সট অ্যালাইনমেন্ট */
+.header-right-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* ফুটার কপিরাইট মিডিল করার জন্য */
+.footer-bottom p {
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+}
+
+/* মেনু স্লাইড অপশন ঠিক করা */
+.nav.active {
+    display: block;
+    transform: translateX(0);
+}
 
