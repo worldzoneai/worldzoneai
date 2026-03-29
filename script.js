@@ -1,30 +1,19 @@
 // ===== GLOBAL VARIABLES =====
-const articlesData = {};
 let allArticles = [];
 
-// ===== LOAD ARTICLES FROM JSON =====
+// ===== LOAD ALL ARTICLES FROM SINGLE JSON FILE =====
 async function loadArticles() {
     try {
         showLoader(true);
         
-        // Load Finance articles
-        const financeResponse = await fetch('data/finance/articles.json');
-        if (!financeResponse.ok) throw new Error('Failed to load finance articles');
-        const financeData = await financeResponse.json();
-        articlesData.finance = financeData;
+        const response = await fetch('articles.json');
+        if (!response.ok) throw new Error('Failed to load articles');
         
-        // Load Make Money articles
-        const moneyResponse = await fetch('data/make-money/articles.json');
-        if (!moneyResponse.ok) throw new Error('Failed to load make money articles');
-        const moneyData = await moneyResponse.json();
-        articlesData['make-money'] = moneyData;
+        allArticles = await response.json();
         
-        // Combine and sort all articles
-        allArticles = [...financeData, ...moneyData].sort((a, b) => 
-            new Date(b.date) - new Date(a.date)
-        );
+        // Sort by date (newest first)
+        allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
         
-        // Load home page
         loadCategory('home');
         
     } catch (error) {
@@ -50,11 +39,11 @@ function loadCategory(category) {
             title = '📰 Latest Articles';
             break;
         case 'finance':
-            articles = articlesData.finance || [];
+            articles = allArticles.filter(a => a.category === 'finance');
             title = '💳 Finance Tips';
             break;
         case 'make-money':
-            articles = articlesData['make-money'] || [];
+            articles = allArticles.filter(a => a.category === 'make-money');
             title = '💵 Make Money Online';
             break;
         case 'latest':
@@ -93,8 +82,7 @@ function createArticleHTML(article, index) {
         adsHTML += `
             <div class="ads-container">
                 <div class="ad-placeholder">
-                    <img src="images/placeholder.jpg" alt="Ad ${i}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
-                    <p style="position: absolute; color: rgba(255,255,255,0.7);">Advertisement ${i}</p>
+                    Advertisement ${i}
                 </div>
             </div>
         `;
@@ -102,6 +90,8 @@ function createArticleHTML(article, index) {
     
     const shareUrl = encodeURIComponent(`\({window.location.origin}?article=\){article.id}`);
     const shareTitle = encodeURIComponent(article.title);
+    
+    const categoryLabel = article.category === 'finance' ? '💳 FINANCE' : '💵 MAKE MONEY';
     
     return `
         <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
@@ -111,7 +101,7 @@ function createArticleHTML(article, index) {
             
             <!-- Article Header -->
             <div class="article-header">
-                <span class="article-badge">${article.category.toUpperCase()}</span>
+                <span class="article-badge">${categoryLabel}</span>
                 <h2 class="article-title" itemprop="headline">${article.title}</h2>
                 <div class="article-meta">
                     <span><i class="fas fa-calendar"></i> ${formatDate(article.date)}</span>
@@ -129,7 +119,7 @@ function createArticleHTML(article, index) {
                     </div>
                     
                     ${hasMore ? `
-                        <button class="read-more-btn" onclick="readFullArticle('\({article.id}', '\){article.category}')">
+                        <button class="read-more-btn" onclick="readFullArticle('${article.id}')">
                             <i class="fas fa-book-open"></i> Read More
                         </button>
                     ` : ''}
@@ -171,9 +161,8 @@ function createArticleHTML(article, index) {
 }
 
 // ===== READ FULL ARTICLE =====
-function readFullArticle(articleId, category) {
-    const articles = articlesData[category] || [];
-    const article = articles.find(a => a.id === articleId);
+function readFullArticle(articleId) {
+    const article = allArticles.find(a => a.id === articleId);
     
     if (!article) {
         alert('Article not found');
@@ -190,8 +179,7 @@ function readFullArticle(articleId, category) {
         adsHTML += `
             <div class="ads-container">
                 <div class="ad-placeholder">
-                    <img src="images/placeholder.jpg" alt="Ad ${i}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
-                    <p style="position: absolute; color: rgba(255,255,255,0.7);">Advertisement ${i}</p>
+                    Advertisement ${i}
                 </div>
             </div>
         `;
@@ -203,9 +191,12 @@ function readFullArticle(articleId, category) {
         .map(para => `<p>${para}</p>`)
         .join('');
     
+    const categoryLabel = article.category === 'finance' ? '💳 FINANCE' : '💵 MAKE MONEY';
+    const backLabel = article.category === 'finance' ? 'Finance' : 'Make Money';
+    
     container.innerHTML = `
-        <button onclick="loadCategory('${category}')" style="margin-bottom: 1.5rem; padding: 0.8rem 1.5rem; background: var(--secondary); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
-            <i class="fas fa-arrow-left"></i> Back to ${category === 'finance' ? 'Finance' : 'Make Money'}
+        <button onclick="loadCategory('${article.category}')" style="margin-bottom: 1.5rem; padding: 0.8rem 1.5rem; background: var(--secondary); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+            <i class="fas fa-arrow-left"></i> Back to ${backLabel}
         </button>
         
         <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
@@ -215,7 +206,7 @@ function readFullArticle(articleId, category) {
             
             <!-- Header -->
             <div class="article-header">
-                <span class="article-badge">${article.category.toUpperCase()}</span>
+                <span class="article-badge">${categoryLabel}</span>
                 <h1 class="article-title" itemprop="headline">${article.title}</h1>
                 <div class="article-meta">
                     <span><i class="fas fa-calendar"></i> ${formatDate(article.date)}</span>
@@ -338,15 +329,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load articles on page load
     loadArticles();
-    
-    // Prevent default link behavior for nav links
-    document.querySelectorAll('.nav a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            if (this.getAttribute('onclick')) {
-                closeMenu();
-            }
-        });
-    });
 });
 
 // ===== CLOSE MENU =====
@@ -389,6 +371,8 @@ function showLoader(show) {
 // ===== COPY TO CLIPBOARD =====
 function copyToClipboard(text) {
     const url = decodeURIComponent(text);
+function copyToClipboard(text) {
+    const url = decodeURIComponent(text);
     navigator.clipboard.writeText(url).then(() => {
         const btn = event.target.closest('button');
         const originalText = btn.innerHTML;
@@ -416,8 +400,6 @@ window.addEventListener('resize', function() {
 document.addEventListener('scroll', function() {
     const header = document.querySelector('.header');
     if (window.scrollY > 0) {
-        header.style.boxShadow = '0 5px 15px rgba(0,0,0,0.15)';
-    } else {
         header.style.boxShadow = '0 5px 15px rgba(0,0,0,0.15)';
     }
 });
