@@ -139,7 +139,7 @@ function displayArticles(articles) {
                     ${article.content.substring(0, 160)}...
                 </p>
                 <span class="read-more-btn" style="color:#007bff; cursor:pointer; font-weight:bold; text-decoration:underline;" onclick="viewArticle('${article.id}')">
-                    আরও পড়ুন
+                    Read more
                 </span>
             </div>
         `;
@@ -155,7 +155,7 @@ function viewArticle(id) {
     const container = document.getElementById('articlesContainer');
     container.innerHTML = `
         <div class="full-article" style="padding: 10px 0;">
-            <button onclick="loadCategory('home')" style="background:none; border:none; color:#007bff; cursor:pointer; font-weight:bold; margin-bottom:15px;">← ফিরে যান</button>
+            <button onclick="loadCategory('home')" style="background:none; border:none; color:#007bff; cursor:pointer; font-weight:bold; margin-bottom:15px;">← Back</button>
             <h1 style="font-size: 2rem; margin-bottom: 10px;">${article.title}</h1>
             <div style="color:#777; margin-bottom:20px;">প্রকাশিত: ${article.date} | লেখক: ${article.author}</div>
             <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
@@ -163,7 +163,7 @@ function viewArticle(id) {
                 ${article.content.replace(/\n/g, '<br>')}
             </div>
             <div style="margin-top:40px; padding:15px; background:#f9f9f9; border-radius:8px;">
-                <strong>শেয়ার করুন:</strong> <br>
+                <strong>শেয়ার:</strong> <br>
                 <button onclick="copyLink('${article.id}')" style="margin-top:10px; padding:5px 15px; cursor:pointer;">লিংক কপি করুন</button>
             </div>
         </div>
