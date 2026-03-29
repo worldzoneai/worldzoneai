@@ -4,22 +4,41 @@ let allArticles = [];
 // ===== LOAD ALL ARTICLES FROM SINGLE JSON FILE =====
 async function loadArticles() {
     try {
+        console.log('Loading articles...'); // ডিবাগ লাইন
         showLoader(true);
         
         const response = await fetch('articles.json');
-        if (!response.ok) throw new Error('Failed to load articles');
+        console.log('Response status:', response.status); // ডিবাগ লাইন
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         
         allArticles = await response.json();
+        console.log('Articles loaded:', allArticles.length); // ডিবাগ লাইন
+        
+        if (allArticles.length === 0) {
+            throw new Error('No articles found in JSON');
+        }
         
         // Sort by date (newest first)
         allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
         
+        console.log('Articles sorted. Loading home...'); // ডিবাগ লাইন
         loadCategory('home');
         
     } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('articlesContainer').innerHTML = 
-            '<p style="text-align:center; color:red; padding: 2rem;">Error loading articles. Please refresh the page.</p>';
+        console.error('Error loading articles:', error);
+        const container = document.getElementById('articlesContainer');
+        container.innerHTML = `
+            <div style="background: #ffe0e0; padding: 2rem; border-radius: 8px; text-align: center; color: #c33;">
+                <h3>⚠️ Error Loading Articles</h3>
+                <p>${error.message}</p>
+                <p style="margin-top: 1rem; color: #666;">
+                    Please check that articles.json exists in the root folder
+                </p>
+            </div>
+        `;
     } finally {
         showLoader(false);
     }
