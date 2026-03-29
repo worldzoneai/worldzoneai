@@ -5,30 +5,43 @@ let allArticles = [];
 async function loadArticles() {
     try {
         showLoader(true);
-        const response = await fetch('articles.json');
+        
+        // '?v=' + Date.now() যোগ করা হয়েছে যাতে ব্রাউজার পুরনো ফাইল না দেখায় (Cache Busting)
+        const response = await fetch('./articles.json?v=' + Date.now());
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            // যদি ৪0৪ এরর আসে তবে এটি ক্যাচ করবে
+            throw new Error(`সার্ভার ফাইলটি খুঁজে পাচ্ছে না (Status: ${response.status})`);
         }
 
-        allArticles = await response.json();
+        const data = await response.json();
 
-        if (allArticles.length === 0) {
-            throw new Error('No articles found in JSON');
+        // চেক করা হচ্ছে ডাটা কি আসলেও কোনো লিস্ট বা অ্যারে কি না
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error('JSON ফাইলে কোনো আর্টিকেল খুঁজে পাওয়া যায়নি বা ফরম্যাট ভুল।');
         }
 
-        // Sort by date (newest first)
+        allArticles = data;
+
+        // তারিখ অনুযায়ী নতুন পোস্টগুলো আগে দেখাবে
         allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+        // হোম পেজ লোড করবে
         loadCategory('home');
 
     } catch (error) {
-        console.error('Error loading articles:', error);
+        console.error('Error details:', error);
         const container = document.getElementById('articlesContainer');
+        
+        // স্ক্রিনে এরর মেসেজ দেখানোর স্টাইলিশ বক্স
         container.innerHTML = `
-            <div style="background: #ffe0e0; padding: 2rem; border-radius: 8px; text-align: center; color: #c33;">
-                <h3>⚠️ Error Loading Articles</h3>
-                <p>${error.message}</p>
+            <div style="background: #fff5f5; padding: 2rem; border-radius: 12px; text-align: center; border: 1px solid #feb2b2; margin: 20px;">
+                <h3 style="color: #c53030; margin-bottom: 10px;">⚠️ লোডিং সমস্যা!</h3>
+                <p style="color: #742a2a; font-weight: bold;">${error.message}</p>
+                <p style="color: #a0aec0; font-size: 13px; margin-top: 10px;">
+                    টিপস: articles.json ফাইলটি index.html এর পাশেই আছে কি না নিশ্চিত করুন।
+                </p>
+                <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 25px; background: #c53030; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">পুনরায় চেষ্টা করুন</button>
             </div>
         `;
     } finally {
