@@ -201,3 +201,15 @@ function searchArticles() {
     container.innerHTML = term ? `<h2>Search Results for: ${term}</h2>` : `<h2>Latest</h2>`;
     filtered.forEach(a => container.innerHTML += createArticleHTML(a));
 }
+
+// script.js এর একদম শুরুতে এটি দিন টেস্ট করার জন্য
+fetch('./articles.json')
+    .then(response => {
+        if (!response.ok) {
+            console.log("Status: " + response.status);
+            alert("ফাইলটি সার্ভারে পাওয়া যাচ্ছে না! Status: " + response.status);
+        }
+        return response.json();
+    })
+    .then(data => console.log("Success:", data))
+    .catch(error => alert("ভুল ধরা পড়েছে: " + error.message));
