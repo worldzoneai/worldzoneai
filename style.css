@@ -234,4 +234,56 @@ body.dark-mode {
     margin: 20px auto;
     display: none;
 }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } 
+}
+/* ১. আর্টিকেলের হেডলাইন থেকে ব্যাকগ্রাউন্ড কালার রিমুভ (স্ক্রিনশট ১২ অনুযায়ী) */
+.article-header {
+    background: none !important; /* গ্রেডিয়েন্ট কালার বাদ দেওয়া হলো */
+    color: var(--text) !important; /* টেক্সট কালার সাধারণ কালো/ধূসর করা হলো */
+    padding: 1.5rem 0 0.5rem 0;
+}
+
+.article-title {
+    color: var(--primary) !important; /* শুধু টাইটেলটি গাঢ় নীল হবে */
+    font-size: 1.8rem;
+}
+
+/* ২. About Us থেকে ফুটার পর্যন্ত সব মাঝখানে আনা (স্ক্রিনশট ১১ ও ১২ এর সমাধান) */
+.footer-content-centered {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center; /* সব টেক্সট মাঝখানে থাকবে */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.social-links {
+    justify-content: center; /* সোশ্যাল আইকন মাঝখানে আনা */
+}
+
+.footer-section ul {
+    padding: 0;
+    list-style: none;
+}
+
+/* ৩. সার্চ বক্সের লোগো/আইকন স্টাইল */
+.search-box .icon-btn {
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+/* মোবাইল রেসপনসিভনেস নিশ্চিত করা */
+@media (max-width: 768px) {
+    .article-title {
+        font-size: 1.4rem;
+        text-align: left;
+    }
+    .footer-section {
+        margin-bottom: 20px;
+    }
+}
+
+
