@@ -1,5 +1,47 @@
 // ===== GLOBAL VARIABLES =====
 let allArticles = [];
+// এই ভেরিয়েবলটি সরাসরি ডাটা ধরে রাখবে
+const myArticlesData = [
+    {
+        "id": "finance-1",
+        "title": "10 Essential Tips for Personal Finance Management",
+        "category": "finance",
+        "author": "John Smith",
+        "date": "2024-01-15",
+        "content": "Managing personal finances is one of the most important skills you can develop..."
+    },
+    {
+        "id": "finance-2",
+        "title": "How to Build an Emergency Fund in 6 Months",
+        "category": "finance",
+        "author": "Sarah Johnson",
+        "date": "2024-01-14",
+        "content": "An emergency fund is one of the most important financial safety nets you can create..."
+    }
+    // আপনার বাকি সব আর্টিকেল এখানে কমা দিয়ে দিয়ে যোগ করুন
+];
+
+// আপনার loadArticles ফাংশনটি এভাবে পরিবর্তন করুন
+async function loadArticles() {
+    try {
+        showLoader(true);
+        
+        // এখন আমরা fetch না করে সরাসরি উপরের ডাটা ব্যবহার করব
+        allArticles = myArticlesData; 
+
+        if (allArticles.length === 0) {
+            throw new Error('No articles found');
+        }
+
+        allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+        loadCategory('home');
+
+    } catch (error) {
+        document.getElementById('articlesContainer').innerHTML = `<h3>Error: ${error.message}</h3>`;
+    } finally {
+        showLoader(false);
+    }
+}
 
 // ===== LOAD ALL ARTICLES FROM SINGLE JSON FILE =====
 async function loadArticles() {
