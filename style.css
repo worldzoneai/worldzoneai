@@ -765,3 +765,59 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #d63a4a;
 }
+/* Search and Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#searchInput {
+    width: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px;
+    outline: none;
+}
+
+#searchInput.show {
+    width: 150px;
+    opacity: 1;
+    padding: 5px 10px;
+}
+
+#searchBtn, #darkModeBtn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Dark Mode Colors */
+body.dark-mode {
+    background-color: #1a202c;
+    color: #f7fafc;
+}
+
+.dark-mode .article-card {
+    background-color: #2d3748;
+    color: white;
+    border: 1px solid #4a5568;
+}
+
+.dark-mode header, .dark-mode nav {
+    background-color: #2d3748;
+}
+
+.dark-mode #searchInput {
+    background-color: #4a5568;
+    color: white;
+}
