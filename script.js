@@ -152,3 +152,35 @@ function copyLink(id) {
 function goHome() {
     loadCategory('home');
 }
+// সার্চ বার টগল করার ফাংশন
+function toggleSearch() {
+    const searchInput = document.getElementById('searchInput');
+    searchInput.classList.toggle('show');
+    if (searchInput.classList.contains('show')) {
+        searchInput.focus();
+    }
+}
+
+// ডার্ক মোড টগল করার ফাংশন
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const btn = document.getElementById('darkModeBtn');
+    
+    // আইকন পরিবর্তন (চাঁদ থেকে সূর্য)
+    if (document.body.classList.contains('dark-mode')) {
+        btn.innerText = '☀️';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        btn.innerText = '🌙';
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// পেজ লোড হওয়ার সময় ইউজার যদি আগে ডার্ক মোড সেট করে থাকে তা চেক করা
+window.onload = function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerText = '☀️';
+    }
+    loadArticles(); // আপনার আগের ফাংশনটি এখানে কল করা হচ্ছে
+};
