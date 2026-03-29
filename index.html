@@ -14,79 +14,74 @@
 <body>
 
     <header class="header">
-        <div class="header-container">
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-
-            <div class="logo" onclick="goHome()">
-                <h1>💰 Finance & Money</h1>
-            </div>
-
-            <div class="header-right-actions">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchArticles()">
-                    <button class="icon-btn" onclick="toggleSearch()" title="Search">
-                        <i class="fas fa-search">🔍</i>
-                    </button>
-                </div>
-            </div>
-
-            <nav class="nav" id="nav">
-                <ul>
-                    <li><a href="javascript:void(0)" onclick="loadCategory('home')">Home</a></li>
-                    <li><a href="javascript:void(0)" onclick="loadCategory('finance')">Finance</a></li>
-                    <li><a href="javascript:void(0)" onclick="loadCategory('make-money')">Make Money</a></li>
-                    <li><a href="javascript:void(0)" onclick="loadCategory('latest')">Latest Posts</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    
-                    <li class="dark-mode-item" onclick="toggleDarkMode()">
-                        <a href="javascript:void(0)" style="color: #ffd700;">
-                            <span id="modeText">Dark Mode</span> <span id="modeIcon">🌙</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+    <div class="header-container">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </header>
 
+        <div class="logo" onclick="goHome()">
+            <h1>💰 Finance & Money</h1>
+        </div>
+
+        <div class="header-right-actions">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchArticles()">
+                <button class="icon-btn" onclick="toggleSearch()" title="Search">
+                    <i class="fas fa-search">🔍</i> 
+                </button>
+            </div>
+        </div>
+
+        <nav class="nav" id="nav">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="loadCategory('home')">Home</a></li>
+                <li><a href="javascript:void(0)" onclick="loadCategory('finance')">Finance</a></li>
+                <li><a href="javascript:void(0)" onclick="loadCategory('make-money')">Make Money</a></li>
+                <li class="dark-mode-item" onclick="toggleDarkMode()">
+                    <a href="javascript:void(0)" style="color: #ffd700;">
+                        <span id="modeText">Dark Mode</span> <span id="modeIcon">🌙</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
     <main class="main-container">
         <div id="loader" class="loader"></div>
         <div id="articlesContainer" class="articles-container"></div>
     </main>
 
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About Us</h3>
-                <p>We provide the best finance and money-making tips for your success.</p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                    <li><a href="terms.html">Terms</a></li>
-                    <li><a href="javascript:void(0)" onclick="loadCategory('finance')">Finance Tips</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Follow Us</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
+    <div class="footer-content-centered">
+        <div class="footer-section">
+            <h3>About Us</h3>
+            <p>We provide the best finance and money-making tips for your success.</p>
         </div>
 
-        <div class="footer-bottom">
-            <p>&copy; 2024 Finance & Money Blog. All Rights Reserved.</p>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="javascript:void(0)" onclick="loadCategory('finance')">Finance Tips</a></li>
+            </ul>
         </div>
-    </footer>
+
+        <div class="footer-section">
+            <h3>Follow Us</h3>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 Finance & Money Blog. All Rights Reserved.</p>
+    </div>
+</footer>
 
     <script src="script.js"></script>
 </body>
