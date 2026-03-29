@@ -1,113 +1,439 @@
-// ১. বিজ্ঞাপনের কোড (এখানে আপনার অ্যাডসেন্স কোড বসাবেন)
-const ADS = {
-    banner: "<div class='ad-slot'>[Homepage Banner Ad]</div>",
-    article: "<div class='ad-slot'>[In-Article Ad]</div>"
-};
+// ===== GLOBAL VARIABLES =====
+const articlesData = {};
+let allArticles = [];
 
-let allPosts = [];
-
-// ২. ডাটা লোড করার ফাংশন (এটাই আসল সমস্যা সমাধান করবে)
-async function fetcharticles() {
+// ===== LOAD ARTICLES FROM JSON =====
+async function loadArticles() {
     try {
-        // এখানে আপনার গিটহাবের ফাইলের নাম 'articles.json' তাই এটাই দেওয়া হলো
-        const response = await fetch('articles.json'); 
-        if (!response.ok) throw new Error('File not found');
-        allPosts = await response.json();
-        renderFeed('All');
-    } catch (err) {
-        console.log("Error loading articles.json. Trying alternative...");
-        // যদি উপরের নামে না পায়, তবে Data.json নামে খোঁজার চেষ্টা করবে
-        try {
-            const resAlt = await fetch('Data.json');
-            allPosts = await resAlt.json();
-            renderFeed('All');
-        } catch (e) {
-            document.getElementById('articles-wrapper').innerHTML = "<p style='text-align:center; padding:20px;'>No articles found. Please check articles.json file.</p>";
-        }
+        showLoader(true);
+        
+        // Load Finance articles
+        const financeResponse = await fetch('data/finance/articles.json');
+        if (!financeResponse.ok) throw new Error('Failed to load finance articles');
+        const financeData = await financeResponse.json();
+        articlesData.finance = financeData;
+        
+        // Load Make Money articles
+        const moneyResponse = await fetch('data/make-money/articles.json');
+        if (!moneyResponse.ok) throw new Error('Failed to load make money articles');
+        const moneyData = await moneyResponse.json();
+        articlesData['make-money'] = moneyData;
+        
+        // Combine and sort all articles
+        allArticles = [...financeData, ...moneyData].sort((a, b) => 
+            new Date(b.date) - new Date(a.date)
+        );
+        
+        // Load home page
+        loadCategory('home');
+        
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('articlesContainer').innerHTML = 
+            '<p style="text-align:center; color:red; padding: 2rem;">Error loading articles. Please refresh the page.</p>';
+    } finally {
+        showLoader(false);
     }
 }
 
-// ৩. ফিড রেন্ডার ফাংশন
-function renderFeed(category, search = "") {
-    const wrapper = document.getElementById('articles-wrapper');
-    wrapper.innerHTML = "";
-    let count = 0;
+// ===== LOAD CATEGORY =====
+function loadCategory(category) {
+    const container = document.getElementById('articlesContainer');
+    let articles = [];
+    let title = '';
+    
+    closeMenu();
+    
+    switch(category) {
+        case 'home':
+            articles = allArticles.slice(0, 5);
+            title = '📰 Latest Articles';
+            break;
+        case 'finance':
+            articles = articlesData.finance || [];
+            title = '💳 Finance Tips';
+            break;
+        case 'make-money':
+            articles = articlesData['make-money'] || [];
+            title = '💵 Make Money Online';
+            break;
+        case 'latest':
+            articles = allArticles;
+            title = '📅 All Latest Posts';
+            break;
+        default:
+            articles = allArticles;
+            title = '📰 Articles';
+    }
+    
+    container.innerHTML = `<h2 style="margin-bottom: 1.5rem; text-align: center; font-size: 1.8rem;">${title}</h2>`;
+    
+    if (articles.length === 0) {
+        container.innerHTML += '<p style="text-align:center; margin-top: 2rem; color: #999;">No articles found.</p>';
+        return;
+    }
+    
+    articles.forEach((article, index) => {
+        container.innerHTML += createArticleHTML(article, index);
+    });
+    
+    showLoader(false);
+    window.scrollTo(0, 0);
+}
 
-    allPosts.forEach(post => {
-        if ((category === 'All' || post.category === category) && post.title.toLowerCase().includes(search.toLowerCase())) {
-            count++;
-            const words = post.content.split(' ');
-            const shortText = words.slice(0, 60).join(' ') + "...";
-            const parts = post.content.split('\n\n');
-
-            const card = document.createElement('div');
-            card.className = "post-card";
-            card.id = `post-${post.id}`;
-            card.innerHTML = `
-                <small style="color:var(--primary); font-weight:bold;">${post.category.toUpperCase()}</small>
-                <div class="post-title">${post.title}</div>
-                <div class="preview-text">${shortText}</div>
-                <div class="full-text hidden-content">
-                    ${ADS.article}
-                    ${parts.slice(0, 2).join('<br><br>')}
-                    ${ADS.article}
-                    ${parts.slice(2).join('<br><br>')}
-                    ${ADS.article}
+// ===== CREATE ARTICLE HTML =====
+function createArticleHTML(article, index) {
+    const wordCount = article.content.split(' ').length;
+    const excerptWords = article.content.split(' ').slice(0, 60).join(' ');
+    const hasMore = wordCount > 60;
+    
+    // Generate 4 Ads
+    let adsHTML = '';
+    for(let i = 1; i <= 4; i++) {
+        adsHTML += `
+            <div class="ads-container">
+                <div class="ad-placeholder">
+                    <img src="images/placeholder.jpg" alt="Ad ${i}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+                    <p style="position: absolute; color: rgba(255,255,255,0.7);">Advertisement ${i}</p>
                 </div>
-                <div class="read-more-btn" onclick="toggleReadMore(${post.id})">Read More</div>
-            `;
-            wrapper.appendChild(card);
-            if (count % 4 === 0) wrapper.innerHTML += ADS.banner;
+            </div>
+        `;
+    }
+    
+    const shareUrl = encodeURIComponent(`\({window.location.origin}?article=\){article.id}`);
+    const shareTitle = encodeURIComponent(article.title);
+    
+    return `
+        <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
+            <meta itemprop="image" content="images/placeholder.jpg">
+            <meta itemprop="datePublished" content="${article.date}">
+            <meta itemprop="author" content="${article.author}">
+            
+            <!-- Article Header -->
+            <div class="article-header">
+                <span class="article-badge">${article.category.toUpperCase()}</span>
+                <h2 class="article-title" itemprop="headline">${article.title}</h2>
+                <div class="article-meta">
+                    <span><i class="fas fa-calendar"></i> ${formatDate(article.date)}</span>
+                    <span><i class="fas fa-user"></i> <span itemprop="author">${article.author}</span></span>
+                    <span><i class="fas fa-clock"></i> ${calculateReadTime(article.content)} min read</span>
+                </div>
+            </div>
+            
+            <!-- Content Wrapper -->
+            <div class="article-content-wrapper">
+                <!-- Left Side: Content & Ads -->
+                <div class="article-left">
+                    <div class="article-body" itemprop="articleBody">
+                        <p>\({excerptWords}\){hasMore ? '...' : ''}</p>
+                    </div>
+                    
+                    ${hasMore ? `
+                        <button class="read-more-btn" onclick="readFullArticle('\({article.id}', '\){article.category}')">
+                            <i class="fas fa-book-open"></i> Read More
+                        </button>
+                    ` : ''}
+                    
+                    <!-- Ads Section -->
+                    <div style="margin-top: 1.5rem;">
+                        ${adsHTML}
+                    </div>
+                </div>
+                
+                <!-- Right Side: Share Buttons -->
+                <div class="share-section">
+                    <div class="share-title"><i class="fas fa-share-alt"></i> Share This</div>
+                    <div class="share-buttons">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-facebook" title="Share on Facebook">
+                            <i class="fab fa-facebook"></i> Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url=\({shareUrl}&text=\){shareTitle}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-twitter" title="Share on Twitter">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
+                        <a href="https://api.whatsapp.com/send?text=\({shareTitle}%20\){shareUrl}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-whatsapp" title="Share on WhatsApp">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-linkedin" title="Share on LinkedIn">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        <button class="share-btn share-copy" onclick="copyToClipboard('${shareUrl}')" title="Copy Link">
+                            <i class="fas fa-copy"></i> Copy Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+// ===== READ FULL ARTICLE =====
+function readFullArticle(articleId, category) {
+    const articles = articlesData[category] || [];
+    const article = articles.find(a => a.id === articleId);
+    
+    if (!article) {
+        alert('Article not found');
+        return;
+    }
+    
+    const container = document.getElementById('articlesContainer');
+    const shareUrl = encodeURIComponent(`\({window.location.origin}?article=\){article.id}`);
+    const shareTitle = encodeURIComponent(article.title);
+    
+    // Generate 4 Ads
+    let adsHTML = '';
+    for(let i = 1; i <= 4; i++) {
+        adsHTML += `
+            <div class="ads-container">
+                <div class="ad-placeholder">
+                    <img src="images/placeholder.jpg" alt="Ad ${i}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+                    <p style="position: absolute; color: rgba(255,255,255,0.7);">Advertisement ${i}</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Full article content
+    const fullContent = article.content
+        .split('\n\n')
+        .map(para => `<p>${para}</p>`)
+        .join('');
+    
+    container.innerHTML = `
+        <button onclick="loadCategory('${category}')" style="margin-bottom: 1.5rem; padding: 0.8rem 1.5rem; background: var(--secondary); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+            <i class="fas fa-arrow-left"></i> Back to ${category === 'finance' ? 'Finance' : 'Make Money'}
+        </button>
+        
+        <article class="article-card" itemscope itemtype="https://schema.org/BlogPosting">
+            <meta itemprop="image" content="images/placeholder.jpg">
+            <meta itemprop="datePublished" content="${article.date}">
+            <meta itemprop="author" content="${article.author}">
+            
+            <!-- Header -->
+            <div class="article-header">
+                <span class="article-badge">${article.category.toUpperCase()}</span>
+                <h1 class="article-title" itemprop="headline">${article.title}</h1>
+                <div class="article-meta">
+                    <span><i class="fas fa-calendar"></i> ${formatDate(article.date)}</span>
+                    <span><i class="fas fa-user"></i> <span itemprop="author">${article.author}</span></span>
+                    <span><i class="fas fa-clock"></i> ${calculateReadTime(article.content)} min read</span>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="article-content-wrapper">
+                <div class="article-left">
+                    <div class="article-body" itemprop="articleBody">
+                        ${fullContent}
+                    </div>
+                    
+                    <!-- Ads -->
+                    <div style="margin-top: 2rem;">
+                        ${adsHTML}
+                    </div>
+                </div>
+                
+                <!-- Share -->
+                <div class="share-section">
+                    <div class="share-title"><i class="fas fa-share-alt"></i> Share This</div>
+                    <div class="share-buttons">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-facebook">
+                            <i class="fab fa-facebook"></i> Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url=\({shareUrl}&text=\){shareTitle}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-twitter">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
+                        <a href="https://api.whatsapp.com/send?text=\({shareTitle}%20\){shareUrl}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-whatsapp">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" 
+                           target="_blank" rel="noopener noreferrer" class="share-btn share-linkedin">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        <button class="share-btn share-copy" onclick="copyToClipboard('${shareUrl}')">
+                            <i class="fas fa-copy"></i> Copy Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    `;
+    
+    window.scrollTo(0, 0);
+}
+
+// ===== SEARCH ARTICLES =====
+function searchArticles() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    
+    if (!searchTerm) {
+        loadCategory('home');
+        return;
+    }
+    
+    const results = allArticles.filter(article => 
+        article.title.toLowerCase().includes(searchTerm) ||
+        article.content.toLowerCase().includes(searchTerm) ||
+        article.author.toLowerCase().includes(searchTerm)
+    );
+    
+    const container = document.getElementById('articlesContainer');
+    
+    if (results.length === 0) {
+        container.innerHTML = `
+            <h2 style="text-align: center; margin: 2rem 0; color: #999;">
+                🔍 No results found for "<strong>${searchTerm}</strong>"
+            </h2>
+        `;
+        return;
+    }
+    
+    container.innerHTML = `
+        <h2 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.8rem;">
+            🔍 Search Results <small style="color: #999;">(${results.length} found)</small>
+        </h2>
+    `;
+    
+    results.forEach((article, index) => {
+        container.innerHTML += createArticleHTML(article, index);
+    });
+    
+    closeMenu();
+    window.scrollTo(0, 0);
+}
+
+// ===== HAMBURGER MENU EVENT =====
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+    
+    // Toggle menu
+    hamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hamburger.classList.toggle('active');
+        nav.classList.toggle('active');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.header-container') && !e.target.closest('.nav')) {
+            hamburger.classList.remove('active');
+            nav.classList.remove('active');
         }
+    });
+    
+    // Search on Enter key
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchArticles();
+        }
+    });
+    
+    // Load articles on page load
+    loadArticles();
+    
+    // Prevent default link behavior for nav links
+    document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.getAttribute('onclick')) {
+                closeMenu();
+            }
+        });
+    });
+});
+
+// ===== CLOSE MENU =====
+function closeMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+    hamburger.classList.remove('active');
+    nav.classList.remove('active');
+}
+
+// ===== GO HOME =====
+function goHome() {
+    loadCategory('home');
+}
+
+// ===== FORMAT DATE =====
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+}
+
+// ===== CALCULATE READ TIME =====
+function calculateReadTime(content) {
+    const wordsPerMinute = 200;
+    const wordCount = content.split(/\s+/).length;
+    const readTime = Math.ceil(wordCount / wordsPerMinute);
+    return readTime < 1 ? 1 : readTime;
+}
+
+// ===== SHOW/HIDE LOADER =====
+function showLoader(show) {
+    const loader = document.getElementById('loader');
+    if (show) {
+        loader.classList.add('active');
+    } else {
+        loader.classList.remove('active');
+    }
+}
+
+// ===== COPY TO CLIPBOARD =====
+function copyToClipboard(text) {
+    const url = decodeURIComponent(text);
+    navigator.clipboard.writeText(url).then(() => {
+        const btn = event.target.closest('button');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        btn.style.background = 'var(--success)';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+        }, 2000);
+    }).catch(err => {
+        alert('Failed to copy link');
     });
 }
 
-// ৪. বিস্তারিত পড়া ও মেনু কন্ট্রোল (আগের মতোই থাকবে)
-function toggleReadMore(id) {
-    const card = document.getElementById(`post-${id}`);
-    const preview = card.querySelector('.preview-text');
-    const full = card.querySelector('.full-text');
-    const btn = card.querySelector('.read-more-btn');
-    if (full.style.display === "block") {
-        full.style.display = "none"; preview.style.display = "block"; btn.innerText = "Read More";
-    } else {
-        full.style.display = "block"; preview.style.display = "none"; btn.innerText = "Show Less";
+// ===== RESPONSIVE HAMBURGER MENU =====
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 767) {
+        document.getElementById('hamburger').classList.remove('active');
+        document.getElementById('nav').classList.remove('active');
     }
+});
+
+// ===== SMOOTH SCROLL ANIMATION =====
+document.addEventListener('scroll', function() {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 0) {
+        header.style.boxShadow = '0 5px 15px rgba(0,0,0,0.15)';
+    } else {
+        header.style.boxShadow = '0 5px 15px rgba(0,0,0,0.15)';
+    }
+});
+
+// ===== LAZY LOADING IMAGES =====
+if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src || img.src;
+                img.classList.add('loaded');
+                observer.unobserve(img);
+            }
+        });
+    });
+    
+    document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
 }
-
-function toggleMenu(e) {
-    if(e) e.stopPropagation();
-    document.getElementById('sidebar').classList.toggle('active');
-    document.getElementById('overlay').classList.toggle('active');
-}
-
-function filterPosts(cat) {
-    document.getElementById('main-feed').style.display = 'block';
-    document.getElementById('static-pages').style.display = 'none';
-    renderFeed(cat); toggleMenu();
-}
-
-function showPage(type) {
-    document.getElementById('main-feed').style.display = 'none';
-    document.getElementById('static-pages').style.display = 'block';
-    const content = document.getElementById('page-content-area');
-    toggleMenu();
-    if(type === 'privacy') content.innerHTML = "<h2>Privacy Policy</h2><p>Your privacy is important to WorldzoneAI...</p>";
-    else if(type === 'terms') content.innerHTML = "<h2>Terms of Service</h2><p>Our content is for informational purposes only...</p>";
-    else if(type === 'contact') content.innerHTML = "<h2>Contact Us</h2><p>Email: contact@worldzoneai.pages.dev</p>";
-}
-
-function toggleTheme() {
-    const body = document.body;
-    const isDark = body.getAttribute('data-theme') === 'dark';
-    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-}
-
-function toggleSearch() {
-    const s = document.getElementById('search-container');
-    s.style.display = s.style.display === 'none' ? 'block' : 'none';
-}
-
-function searchPosts() { renderFeed('All', document.getElementById('search-input').value); }
-
-fetchArticles();
