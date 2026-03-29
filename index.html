@@ -12,8 +12,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx" crossorigin="anonymous"></script>
 </head>
 <body>
-
-    <header class="header">
+ <header class="header">
     <div class="header-container">
         <div class="hamburger" id="hamburger">
             <span></span>
@@ -29,7 +28,7 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchArticles()">
                 <button class="icon-btn" onclick="toggleSearch()" title="Search">
-                    <i class="fas fa-search">🔍</i> 
+                    🔍
                 </button>
             </div>
         </div>
@@ -39,7 +38,7 @@
                 <li><a href="javascript:void(0)" onclick="loadCategory('home')">Home</a></li>
                 <li><a href="javascript:void(0)" onclick="loadCategory('finance')">Finance</a></li>
                 <li><a href="javascript:void(0)" onclick="loadCategory('make-money')">Make Money</a></li>
-                <li class="dark-mode-item" onclick="toggleDarkMode()">
+                <li><a href="contact.html">Contact</a></li> <li class="dark-mode-item" onclick="toggleDarkMode()">
                     <a href="javascript:void(0)" style="color: #ffd700;">
                         <span id="modeText">Dark Mode</span> <span id="modeIcon">🌙</span>
                     </a>
@@ -48,6 +47,7 @@
         </nav>
     </div>
 </header>
+
     <main class="main-container">
         <div id="loader" class="loader"></div>
         <div id="articlesContainer" class="articles-container"></div>
@@ -78,7 +78,8 @@
             </div>
         </div>
     </div>
-    <div class="footer-bottom">
+    
+    <div class="footer-bottom" style="text-align: center; width: 100%; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 20px;">
         <p>&copy; 2024 Finance & Money Blog. All Rights Reserved.</p>
     </div>
 </footer>
