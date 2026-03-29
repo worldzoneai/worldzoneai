@@ -2,62 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WorldzoneAI - Global Finance & Trading</title>
-    <meta name="description" content="International platform for Trading, Finance, and Making Money Online.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn Finance and Make Money Online with expert tips and guides">
+    <meta name="keywords" content="finance, make money, personal finance, online earning">
+    <meta name="author" content="Finance & Money Blog">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Finance & Make Money - Learn to Earn">
+    <meta property="og:description" content="Best tips for financial success">
+    <meta property="og:image" content="images/placeholder.jpg">
+    <meta property="og:url" content="https://yoursite.com">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Finance & Make Money">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://yoursite.com">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Finance & Money Blog",
+        "url": "https://yoursite.com",
+        "description": "Learn finance and make money online"
+    }
+    </script>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx"
+         crossorigin="anonymous"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_XXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_XXXXXXX');
+    </script>
+    
+    <title>Finance & Make Money - Learn to Earn Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body onclick="closeSidebarOutside(event)">
+<body>
 
-    <header class="main-header">
-        <div class="header-inner">
-            <div class="menu-btn" onclick="toggleMenu(event)"><i class="fa fa-bars"></i></div>
-            <div class="logo" onclick="location.reload()">Worldzone<span>AI</span></div>
-            <div class="header-icons">
-                <i class="fa fa-moon" id="theme-icon" onclick="toggleTheme()"></i>
-                <i class="fa fa-search" onclick="toggleSearch()"></i>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo" onclick="goHome()">
+                <h1>💰 Finance & Money</h1>
             </div>
-        </div>
-        <div id="search-container" class="search-bar" style="display:none;">
-            <input type="text" id="search-input" placeholder="Search finance news..." onkeyup="searchPosts()">
+            
+            <!-- Hamburger Menu -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <nav class="nav" id="nav">
+                <ul>
+                    <li><a href="#" onclick="loadCategory('home'); return false;">Home</a></li>
+                    <li><a href="#" onclick="loadCategory('finance'); return false;">Finance</a></li>
+                    <li><a href="#" onclick="loadCategory('make-money'); return false;">Make Money</a></li>
+                    <li><a href="#" onclick="loadCategory('latest'); return false;">Latest Posts</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-top">
-            <div class="logo">Worldzone<span>AI</span></div>
-            <span class="close-sidebar" onclick="toggleMenu(event)">&times;</span>
-        </div>
-        <ul class="nav-links">
-            <li onclick="filterPosts('All')"><i class="fa fa-home"></i> Home</li>
-            <li onclick="filterPosts('Trading')"><i class="fa fa-chart-line"></i> Trading</li>
-            <li onclick="filterPosts('Finance')"><i class="fa fa-wallet"></i> Finance</li>
-            <li onclick="filterPosts('Make Money')"><i class="fa fa-money-bill-wave"></i> Make Money</li>
-            <hr style="border: 0.5px solid var(--border); margin: 15px 0;">
-            <li onclick="showPage('privacy')">Privacy Policy</li>
-            <li onclick="showPage('terms')">Terms of Service</li>
-            <li onclick="showPage('contact')">Contact Us</li>
-        </ul>
+    <!-- SEARCH BAR -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search articles..." class="search-input">
+        <button onclick="searchArticles()" class="search-btn">
+            <i class="fas fa-search"></i> Search
+        </button>
     </div>
 
-    <div id="overlay" class="overlay" onclick="toggleMenu(event)"></div>
-
-    <main class="content-feed">
-        <div id="main-feed">
-            <div id="articles-wrapper"></div>
-        </div>
-        <div id="static-pages" style="display:none;">
-            <div id="page-content-area" class="post-card page-card"></div>
-        </div>
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+        <div id="loader" class="loader"></div>
+        <div id="articlesContainer" class="articles-container"></div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 WorldzoneAI Global. All rights reserved.</p>
-        <div class="footer-links">
-            <span onclick="showPage('privacy')">Privacy</span> | 
-            <span onclick="showPage('terms')">Terms</span> | 
-            <span onclick="showPage('contact')">Contact</span>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>We provide the best finance and money-making tips for your success. Learn from expert guides and start earning today!</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms & Conditions</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="#" onclick="loadCategory('finance'); return false;">Finance Tips</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <p>Get latest updates in your inbox</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Your email" class="email-input">
+                    <button class="subscribe-btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Finance & Money Blog. All Rights Reserved.</p>
         </div>
     </footer>
 
