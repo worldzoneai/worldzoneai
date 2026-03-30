@@ -238,3 +238,14 @@ body.dark-mode { background-color: #121212 !important; color: #e0e0e0 !important
     margin: 20px auto;
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+/* কন্টাক্ট পেজ মোবাইল ফিক্স */
+@media screen and (max-width: 600px) {
+    a[href^="mailto"] {
+        font-size: 14px !important;
+        padding: 10px !important;
+        width: 90% !important;
+        word-wrap: break-word !important;
+        display: inline-block !important;
+    }
+}
+
