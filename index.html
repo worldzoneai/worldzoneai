@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Whiteboard Animator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ১. নিউ প্রজেক্ট পপ-আপ মোডাল (শুরুতে এটি দেখাবে) -->
+    <div class="modal-overlay" id="project-modal">
+        <div class="modal-box">
+            <h2>Create New Project</h2>
+            <div class="modal-input-group">
+                <label>Project Name:</label>
+                <input type="text" id="project-name" value="Untitled Project">
+            </div>
+            <div class="modal-input-group">
+                <label>Choose Canvas Size / Resolution:</label>
+                <select id="canvas-resolution">
+                    <option value="youtube">YouTube Video (16:9 - Landscape)</option>
+                    <option value="reels" selected>Instagram Reels / TikTok / Shorts (9:16 - Portrait)</option>
+                    <option value="square">Square Post (1:1)</option>
+                </select>
+            </div>
+            <button id="create-project-btn">Create Project</button>
+        </div>
+    </div>
+
+    <!-- ২. মূল এডিটর পেজ (শুরুতে এটি লুকিয়ে থাকবে, Create এ ক্লিক করলে বের হবে) -->
+    <div class="app-container hidden" id="main-app">
+        <!-- টপ বার -->
+        <header class="top-bar">
+            <div class="left-actions">
+                <button class="icon-btn" id="back-to-menu">⬅️</button>
+                <h3 id="display-project-name">Project</h3>
+            </div>
+            <div class="right-actions">
+                <button class="icon-btn">💾</button>
+                <button class="icon-btn">▶️</button>
+                <button class="icon-btn"> Sharing</button>
+            </div>
+        </header>
+
+        <!-- মেইন ওয়ার্কস্পেস (ছবি অনুযায়ী সাদা ক্যানভাস এরিয়া) -->
+        <main class="workspace">
+            <div class="canvas-holder">
+                <!-- এই ক্যানভাসের সাইজ জাভাস্ক্রিপ্ট দিয়ে পরিবর্তন হবে -->
+                <div class="white-canvas" id="canvas">
+                    <!-- বেনিমির লোগো ওয়াটারমার্ক (আপনার নতুন ছবি অনুযায়ী নিচের ডান কোনায়) -->
+                    <div class="canvas-watermark">Benime</div>
+                </div>
+            </div>
+            <!-- ক্যানভাসের ঠিক নিচে নীল প্লে বাটন -->
+            <button class="center-play-btn">▶️</button>
+        </main>
+
+        <!-- বটম কন্ট্রোল প্যানেল -->
+        <footer class="bottom-panel">
+            <!-- স্লাইড বা সিন ম্যানেজমেন্ট (ছবিতে থাকা ১ নম্বর ও + বাটন) -->
+            <div class="timeline-bar">
+                <div class="slide-thumb active">1</div>
+                <button class="add-slide-btn">+</button>
+            </div>
+
+            <!-- টুলস মেনু (Elements, Text, AI Image, Music, BG) -->
+            <div class="tools-bar">
+                <button class="tool-btn">
+                    <span class="tool-icon">😀</span>
+                    <span class="tool-label">Elements</span>
+                </button>
+                <button class="tool-btn">
+                    <span class="tool-icon">T</span>
+                    <span class="tool-label">Text</span>
+                </button>
+                <button class="tool-btn">
+                    <span class="tool-icon">✨</span>
+                    <span class="tool-label">AI Image</span>
+                </button>
+                <button class="tool-btn">
+                    <span class="tool-icon">🎵</span>
+                    <span class="tool-label">Music</span>
+                </button>
+                <button class="tool-btn">
+                    <span class="tool-icon">🖼️</span>
+                    <span class="tool-label">BG</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
